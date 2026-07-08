@@ -13,21 +13,21 @@ const state = {
   xPositions: [],      // position -> left x (px)
   initialOrder: [],
   gapUnit: 5,
-  letterGap: 10, // 2x unit
+  letterGap: 4, // 2x unit
   wordGap: 90,   // 6x unit
   cycleCount: 0
 };
 
 // Runtime configuration, adjustable via UI controls
 const config = {
-  tickIntervalMs: 500,
-  ticksPerCycle: 3,
+  tickIntervalMs: 8000,
+  ticksPerCycle: 1,
   maxGroupSize: 12,
   enableFontEffect: false,
-  enableBlurEffect: false,
-  scrambleDurationMs: 1000,
+  enableBlurEffect: true,
+  scrambleDurationMs: 500,
   scrambleDelayMs: 1000,
-  motionDurationMs: 500,
+  motionDurationMs: 1000,
   preCycleHoldMs: 0
 };
 
@@ -36,7 +36,7 @@ const ALT_FONTS = ["'Playfair Display', serif", "'Roboto Mono', monospace", "'Ru
 function pickAltFont() { return ALT_FONTS[Math.floor(Math.random() * ALT_FONTS.length)]; }
 function setMovingFont(el) { if (!config.enableFontEffect) return; el.style.fontFamily = pickAltFont(); }
 function resetFont(el) { el.style.fontFamily = FONT_BASE; }
-const BLUR_PX = 8;
+const BLUR_PX = 2;
 function setMovingBlur(el) { if (!config.enableBlurEffect) return; el.style.filter = `blur(${BLUR_PX}px)`; }
 function resetBlur(el) { el.style.filter = 'none'; }
 
@@ -68,6 +68,7 @@ function setupAbsoluteSlots(glyphs) {
   const { rects, containerRect } = measureGlyphs(glyphs);
   // Fix container height so absolutely positioned children don't collapse it
   lineEl.style.height = `${containerRect.height}px`;
+  lineEl.style.width = `${containerRect.width}px`;
   const left0 = containerRect.left;
 
   state.glyphs = glyphs;
@@ -98,7 +99,7 @@ function setupAbsoluteSlots(glyphs) {
     measureLayer.appendChild(box);
     const r = box.getBoundingClientRect();
     // approximate ink width as element width; leftOffsets set to 0 due to font variance
-    state.widths[i] = r.width - 4; // remove artificial padding
+    state.widths[i] = r.width - 2; // remove artificial padding
     state.leftOffsets[i] = 0;
     measureLayer.removeChild(box);
   }
@@ -316,7 +317,7 @@ function scrambleRevealToOriginal(onDone) {
     const endTime = startTime + durationMs;
 
     // Character set for scrambling (inspired by classic decoder effects)
-    const scrambleChars = '!<>-_\\/[]{}—=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+    const scrambleChars = '!<>-[]+*?#ABCEILRS'.split('');
     const isSpaceAt = (i) => state.chars[i] === ' ' || state.chars[i] === '';
     const randChar = () => scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
 
@@ -439,6 +440,7 @@ function restoreInitialState() {
 window.addEventListener('DOMContentLoaded', () => {
   const glyphs = createGlyphs(PHRASE);
   setupAbsoluteSlots(glyphs);
+  startScheduler();
 });
 
 lineEl.addEventListener("mouseenter", () => {
