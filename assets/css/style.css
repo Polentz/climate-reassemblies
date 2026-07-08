@@ -1,0 +1,55 @@
+html {
+    font-size: 100%;
+}
+
+html,
+body {
+    background: var(--color-white);
+    font-family: "Apercu Medium", Helvetica, Arial, sans-serif;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    margin: 0 auto;
+    z-index: 1000;
+}
+
+h1 {
+    position: relative;
+    font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    /* letter-spacing: 4%; */
+}
+
+.glyph {
+    display: inline-block;
+    will-change: transform;
+    filter: none;
+    transform: translateZ(0);
+}
+
+.abs {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+nav {
+    display: flex;
+    gap: 2rem;
+}
+
+nav button {
+    font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: 4%;
+}
