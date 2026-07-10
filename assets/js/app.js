@@ -13,7 +13,7 @@ const state = {
   xPositions: [],      // position -> left x (px)
   initialOrder: [],
   gapUnit: 5,
-  letterGap: 4, // 2x unit
+  letterGap: 2, // 2x unit
   wordGap: 90,   // 6x unit
   cycleCount: 0
 };
