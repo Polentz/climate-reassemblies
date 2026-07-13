@@ -42,89 +42,29 @@
     letter-spacing: 4px;
 }
 
-.interactive-button {
+.button {
+    --button-shift: 0rem;
+    --button-lift: 0rem;
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    overflow: hidden;
     cursor: pointer;
-    white-space: nowrap;
-    /* background-color: var(--color-button); */
-    color: var(--color-black);
     border-radius: 999px;
-    /* collapsed state: no width, no padding, so it takes up no room in the flow */
-    max-width: 0;
-    padding: .5rem 0;
-    opacity: 0;
-    transform: translateX(-.75rem);
-    filter: blur(3px);
-    pointer-events: none;
     box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
+    transform: translate(var(--button-shift), var(--button-lift));
     transition:
-        max-width .5s cubic-bezier(.22, 1, .36, 1),
-        padding .5s cubic-bezier(.22, 1, .36, 1),
-        transform .5s cubic-bezier(.34, 1.56, .64, 1),
-        opacity .3s ease,
-        filter .3s ease;
+        background .3s ease,
+        color .3s ease,
+        box-shadow .3s ease,
+        transform .5s cubic-bezier(.34, 1.56, .64, 1);
 }
 
-/* the sweep of light that crosses the pill once it is revealed */
-/* .interactive-button::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(110deg,
-            transparent 30%,
-            rgba(255, 255, 255, .85) 50%,
-            transparent 70%);
-    transform: translateX(-120%);
-} */
-
-.item-label:hover .interactive-button,
-.item-label:focus-within .interactive-button {
-    max-width: 12rem;
-    padding: .5rem 1rem;
-    opacity: 1;
-    transform: none;
-    filter: none;
-    pointer-events: auto;
+.button:hover,
+.button:focus-visible {
+    --button-lift: -4px;
 }
 
-/* .item-label:hover .interactive-button::after,
-.item-label:focus-within .interactive-button::after {
-    transition: transform .7s ease .15s;
-    transform: translateX(120%);
-} */
-
-.item-label:hover .interactive-button:hover,
-.item-label:focus-within .interactive-button:hover {
-    transform: translateY(-4px);
-}
-
-.item-label:hover .interactive-button:active,
-.item-label:focus-within .interactive-button:active {
-    transform: translateY(0);
+.button:active {
+    --button-lift: 0rem;
     transition-duration: .1s;
-}
-
-.interactive-icon svg {
-    height: 1rem;
-    transition: transform .75s cubic-bezier(.22, 1, .36, 1);
-}
-
-.item-label:hover .interactive-icon svg {
-    transform: rotate(360deg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-    .interactive-button,
-    .interactive-button::after,
-    .interactive-icon svg {
-        transition-duration: .01ms;
-        transform: none;
-        filter: none;
-    }
 }
 
 .full-height {
@@ -149,4 +89,13 @@
     gap: 2rem;
     padding-bottom: 2rem;
     border-bottom: solid 1px var(--color-black);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .button {
+        transition-duration: .01ms;
+        transform: none;
+        filter: none;
+    }
 }
