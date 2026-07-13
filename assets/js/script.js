@@ -6,30 +6,95 @@ const documentHeight = () => {
 const slider = () => {
     const slider = document.getElementById("slider");
     const sliderTrack = slider.querySelector(".slider-track");
+    const slides = sliderTrack.querySelectorAll(".slide");
     const sliderClose = slider.querySelector(".slider-close");
     const tabs = document.querySelectorAll(".sidebar-tab");
 
-    const openSlider = (index) => {
-        slider.hidden = false;
-        // Wait a frame so the element is laid out (still translated off-screen)
-        // before adding .open, so the transform transition actually runs.
-        requestAnimationFrame(() => {
-            slider.classList.add("open");
-            const target = document.getElementById(`slide-${index}`);
-            if (target) target.scrollIntoView({ behavior: "auto", inline: "start" });
+    // Honour reduced-motion: fall back to instant show/hide with no tweens.
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let isOpen = false;
+    let openTween = null;
+
+    // Reveal the contents of a slide with a soft, staggered rise.
+    const revealSlide = (target) => {
+        if (!target || reduceMotion) return;
+        gsap.fromTo(
+            target.children,
+            { autoAlpha: 0, y: 24 },
+            { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08, delay: 0.15 }
+        );
+    };
+
+    // Smoothly glide the track to the requested slide.
+    const scrollToSlide = (target) => {
+        if (!target) return;
+        gsap.to(sliderTrack, {
+            scrollLeft: target.offsetLeft,
+            duration: 0.7,
+            ease: "power3.inOut",
         });
-    }
+    };
+
+    const openSlider = (index) => {
+        const target = document.getElementById(`slide-${index}`);
+
+        if (isOpen) {
+            // Already open — just slide across to the chosen panel.
+            scrollToSlide(target);
+            revealSlide(target);
+            return;
+        }
+
+        isOpen = true;
+        slider.hidden = false;
+        // Jump the track to the target before the panel slides in.
+        if (target) sliderTrack.scrollLeft = target.offsetLeft;
+
+        if (reduceMotion) {
+            gsap.set(slider, { xPercent: 0 });
+            return;
+        }
+
+        openTween = gsap.fromTo(
+            slider,
+            { xPercent: 100, x: 0 },
+            { xPercent: 0, x: 0, duration: 0.6, ease: "power3.out", onComplete: () => revealSlide(target) }
+        );
+    };
 
     const closeSlider = () => {
-        slider.classList.remove("open");
-        // Slide back out to the right, then hide once the transition ends.
-        slider.addEventListener("transitionend", () => {
+        if (!isOpen) return;
+        openTween?.kill();
+
+        const finish = () => {
             slider.hidden = true;
-        }, { once: true });
-    }
+            isOpen = false;
+        };
+
+        if (reduceMotion) {
+            gsap.set(slider, { xPercent: 100 });
+            finish();
+            return;
+        };
+
+        gsap.to(slides.children, {
+            autoAlpha: 0,
+            y: 24,
+            onComplete: finish,
+        });
+
+        gsap.to(slider, {
+            xPercent: 100,
+            duration: 0.5,
+            ease: "power3.in",
+            onComplete: finish,
+        });
+
+    };
 
     tabs.forEach((tab) => {
-        tab.addEventListener("click", (e) => {
+        tab.addEventListener("click", () => {
             [...tabs].filter(i => i !== tab).forEach(i => i.classList.remove("open"));
             tab.classList.add("open");
             openSlider(tab.dataset.slide);
@@ -42,7 +107,10 @@ const slider = () => {
     });
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && !slider.hidden) closeSlider();
+        if (e.key === "Escape" && isOpen) {
+            closeSlider();
+            tabs.forEach((tab) => tab.classList.remove("open"));
+        }
     });
 };
 
@@ -79,6 +147,7 @@ const backgroundParallax = () => {
 };
 
 window.addEventListener("load", () => {
+    history.scrollRestoration = "manual";
     documentHeight();
     slider();
     // backgroundParallax();

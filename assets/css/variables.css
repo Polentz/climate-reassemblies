@@ -2,6 +2,62 @@
     --doc-height: 100%;
     --color-black: #000000;
     --color-white: #ffffff;
-    --color-background: #ffdede;
+    --color-button: #fff7c4;
+
+    --color-scheme-background: #f4f4ee;
+    --color-scheme-primary: #07006d;
+    --color-scheme-secondary: #dde3eb;
+
     --letter-spacing: 2px;
+}
+
+.text-style-h2 {
+    font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
+    font-size: 4rem;
+    line-height: 1.2;
+}
+
+.text-style-h3 {
+    font-family: "Apercu Medium", Helvetica, Arial, sans-serif;
+    font-size: 2rem;
+    line-height: 1.2;
+}
+
+.text-style-p {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+
+.text-style-label {
+    width: 100%;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-style: bold;
+    font-size: .9rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-align: start;
+}
+
+.interactive-button {
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.interactive-button:hover {
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.full-height {
+    min-height: calc(var(--doc-height) - 8rem);
+}
+
+.sticky {
+    position: sticky;
+    top: 12rem;
+    /* top: 0; */
 }

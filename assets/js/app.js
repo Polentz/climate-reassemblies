@@ -1,6 +1,12 @@
 const PHRASE = "Climate ReAssemblies";
 
 const lineEl = document.getElementById('line');
+const headerEl = document.querySelector('header');
+
+// Show a "progress" cursor only while glyphs are actually in motion
+function setHeaderBusy(busy) {
+  if (headerEl) headerEl.style.cursor = busy ? 'progress' : 'default';
+}
 
 // Layout/state based on dynamic absolute-position slots with a fixed 5px ink gap
 const state = {
@@ -24,7 +30,7 @@ const config = {
   ticksPerCycle: 1,
   maxGroupSize: 12,
   enableFontEffect: false,
-  enableBlurEffect: true,
+  enableBlurEffect: false,
   scrambleDurationMs: 500,
   scrambleDelayMs: 1000,
   motionDurationMs: 1000,
@@ -202,7 +208,7 @@ function runCycle() {
   const leg = totalDur / 4 / 1000; // GSAP durations are in seconds
   const ease = 'power3.inOut';
   const stagger = 0.06;
-  const tl = gsap.timeline({ defaults: { ease } });
+  const tl = gsap.timeline({ defaults: { ease }, onStart: () => setHeaderBusy(true) });
 
   moves.forEach((m, idx) => {
     const g = state.glyphs[m.glyphIndex];
@@ -242,6 +248,7 @@ function runCycle() {
     state.order = newOrder;
     state.xPositions = newX;
     state.posOfGlyph = state.glyphs.map((_, i) => state.order.indexOf(i));
+    setHeaderBusy(false);
   });
 
   return tl;
@@ -311,6 +318,8 @@ function scrambleRevealToOriginal(onDone) {
       gsap.set(g, { x: targetXPositions[i], y: 0 });
     });
 
+    setHeaderBusy(true);
+
     // Use configured scramble duration
     const durationMs = config.scrambleDurationMs;
     const startTime = performance.now();
@@ -366,6 +375,7 @@ function scrambleRevealToOriginal(onDone) {
         state.posOfGlyph = state.glyphs.map((_, i) => i);
         state.xPositions = targetXPositions;
         state.glyphs.forEach((g, i) => { gsap.set(g, { x: state.xPositions[i], y: 0 }); });
+        setHeaderBusy(false);
         if (typeof onDone === 'function') onDone();
       }
     }
@@ -398,10 +408,11 @@ function startScheduler() {
         if (!schedulerRunning) return;
         if (tickCount >= config.ticksPerCycle) {
           // run secret scramble reveal, then reset counter and unlock
-          scrambleRevealToOriginal(() => {
-            tickCount = 0;
-            locked = false;
-          });
+          // scrambleRevealToOriginal(() => {
+          //   tickCount = 0;
+          //   locked = false;
+          // });
+          return;// disable scramble reveal for now
         } else {
           locked = false;
         }
@@ -417,6 +428,7 @@ function startScheduler() {
 
 function stopScheduler() {
   schedulerRunning = false;
+  setHeaderBusy(false);
   if (schedulerIntervalId) { clearInterval(schedulerIntervalId); schedulerIntervalId = null; }
   schedulerTimeouts.forEach(clearTimeout);
   schedulerTimeouts = [];
@@ -440,7 +452,7 @@ function restoreInitialState() {
 window.addEventListener('DOMContentLoaded', () => {
   const glyphs = createGlyphs(PHRASE);
   setupAbsoluteSlots(glyphs);
-  startScheduler();
+  // startScheduler();
 });
 
 lineEl.addEventListener("mouseenter", () => {
