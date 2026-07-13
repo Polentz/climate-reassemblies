@@ -1,7 +1,7 @@
 :root {
     --doc-height: 100%;
     --color-black: #000000;
-    --color-white: #f4f4ee;
+    --color-white: #ffffff;
     --color-accent: #ffffff;
     --color-button: #ffffff;
 
@@ -30,6 +30,18 @@
     font-style: normal;
     font-size: 1.25rem;
     line-height: 1.2;
+}
+
+.text-style-quote {
+    font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
+    font-size: 8rem;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.text-style-quote p {
+    padding-top: 1rem;
+    text-align: center;
 }
 
 .text-style-label {
@@ -81,7 +93,7 @@
 .flex-column {
     display: flex;
     flex-direction: column;
-    gap: 6rem;
+    gap: 2rem;
 }
 
 .flex-column-item {
