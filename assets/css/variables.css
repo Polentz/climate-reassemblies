@@ -1,8 +1,8 @@
 :root {
     --doc-height: 100%;
     --color-black: #000000;
-    --color-white: #ffffff;
-    /* --color-button: #fff7c4; */
+    --color-white: #f4f4ee;
+    --color-accent: #ffffff;
     --color-button: #ffffff;
 
     --color-scheme-background: #f4f4ee;
@@ -59,6 +59,7 @@
 
 .button:hover,
 .button:focus-visible {
+    background: var(--color-button);
     --button-lift: -4px;
 }
 
