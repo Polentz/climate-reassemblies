@@ -52,15 +52,14 @@
     /* background-color: var(--color-button); */
     color: var(--color-black);
     border-radius: 999px;
-
     /* collapsed state: no width, no padding, so it takes up no room in the flow */
     max-width: 0;
     padding: .5rem 0;
     opacity: 0;
-    transform: translateX(-.75rem) scale(.92);
+    transform: translateX(-.75rem);
     filter: blur(3px);
     pointer-events: none;
-
+    box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
     transition:
         max-width .5s cubic-bezier(.22, 1, .36, 1),
         padding .5s cubic-bezier(.22, 1, .36, 1),
@@ -97,13 +96,14 @@
     transform: translateX(120%);
 } */
 
-.interactive-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
+.item-label:hover .interactive-button:hover,
+.item-label:focus-within .interactive-button:hover {
+    transform: translateY(-4px);
 }
 
-.interactive-button:active {
-    transform: translateY(0) scale(.96);
+.item-label:hover .interactive-button:active,
+.item-label:focus-within .interactive-button:active {
+    transform: translateY(0);
     transition-duration: .1s;
 }
 
