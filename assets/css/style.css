@@ -128,7 +128,7 @@ main {
     border-left: solid 1px var(--color-black);
     border-radius: 30px;
     will-change: transform;
-    overflow-x: auto;
+    overflow-y: auto;
     scrollbar-width: none;
 }
 
@@ -177,16 +177,19 @@ main {
     white-space: nowrap;
     padding: 2rem .5rem;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .section.current .section-nav-tab {
-    border-right: none;
     opacity: 0;
 }
 
+.section.current.scrolled .section-nav-tab {
+    opacity: 1;
+}
+
 .section-layout-wrapper {
-    padding: 6rem 4rem 6rem 6rem;
+    padding: 8rem;
 }
 
 .section-header {

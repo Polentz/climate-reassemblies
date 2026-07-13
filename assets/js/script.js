@@ -1,116 +1,104 @@
+gsap.registerPlugin(ScrollTrigger);
+
 const documentHeight = () => {
     const doc = document.documentElement;
     doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
 };
 
-const slider = () => {
-    const slider = document.getElementById("slider");
-    const sliderTrack = slider.querySelector(".slider-track");
-    const slides = sliderTrack.querySelectorAll(".slide");
-    const sliderClose = slider.querySelector(".slider-close");
-    const tabs = document.querySelectorAll(".sidebar-tab");
+const handleSections = () => {
+    const sections = [...document.querySelectorAll(".section")];
+    if (!sections.length) return;
 
-    // Honour reduced-motion: fall back to instant show/hide with no tweens.
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let isOpen = false;
-    let openTween = null;
+    // The deck has one slot per section. Slot 0 is the right-most, front-most card;
+    // every slot after it sits 5rem further left, which is exactly the width of a tab —
+    // so a card can never cover the tab of the card behind it.
+    let slotWidth = 0;
+    const measure = () => {
+        slotWidth = parseFloat(getComputedStyle(document.documentElement).fontSize) * 5;
+    };
+    const slotX = (slot) => -slot * slotWidth;
 
-    // Reveal the contents of a slide with a soft, staggered rise.
-    const revealSlide = (target) => {
-        if (!target || reduceMotion) return;
-        gsap.fromTo(
-            target.children,
-            { autoAlpha: 0, y: 24 },
-            { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08, delay: 0.15 }
-        );
+    // The active card owns slot 0; the rest keep their DOM order in the slots behind it.
+    const slotOf = (section, active) => {
+        const rest = sections.filter((s) => s !== active);
+        return section === active ? 0 : rest.indexOf(section) + 1;
     };
 
-    // Smoothly glide the track to the requested slide.
-    const scrollToSlide = (target) => {
-        if (!target) return;
-        gsap.to(sliderTrack, {
-            scrollLeft: target.offsetLeft,
-            duration: 0.7,
-            ease: "power3.inOut",
+    // Lay the deck out. `animate` is false on load and on resize, true on a click.
+    const layout = (active, animate) => {
+        sections.forEach((section) => {
+            const slot = slotOf(section, active);
+            // Front-most card needs the highest z-index, so count down from the back.
+            gsap.set(section, { zIndex: sections.length - slot, transformOrigin: "left center" });
+            if (section === active || !animate) {
+                gsap.set(section, { x: slotX(slot) });
+            } else {
+                gsap.to(section, { x: slotX(slot), duration: 0.6, ease: "power3.out" });
+            }
         });
     };
 
-    const openSlider = (index) => {
-        const target = document.getElementById(`slide-${index}`);
+    const activate = (section) => {
+        if (section.classList.contains("current")) return;
 
-        if (isOpen) {
-            // Already open — just slide across to the chosen panel.
-            scrollToSlide(target);
-            revealSlide(target);
+        sections.forEach((s) => s.classList.toggle("current", s === section));
+        section.scrollTop = 0;
+
+        if (reduced) {
+            layout(section, false);
             return;
         }
 
-        isOpen = true;
-        slider.hidden = false;
-        // Jump the track to the target before the panel slides in.
-        if (target) sliderTrack.scrollLeft = target.offsetLeft;
-
-        if (reduceMotion) {
-            gsap.set(slider, { xPercent: 0 });
-            return;
-        }
-
-        openTween = gsap.fromTo(
-            slider,
-            { xPercent: 100, x: 0 },
-            { xPercent: 0, x: 0, duration: 0.6, ease: "power3.out", onComplete: () => revealSlide(target) }
-        );
+        // The other cards slide across to their new slots while the clicked one
+        // rises out of the deck: a short push right, then an ease back into slot 0.
+        layout(section, true);
+        gsap.timeline()
+            .fromTo(section,
+                { x: slotX(0) + 64, scale: 0.98 },
+                { x: slotX(0), scale: 1, duration: 0.7, ease: "power3.out" })
+            .fromTo(section.querySelectorAll(".section-header, .section-content > *"),
+                { y: 24, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: "power2.out", clearProps: "all" },
+                0.15);
     };
 
-    const closeSlider = () => {
-        if (!isOpen) return;
-        openTween?.kill();
+    // Each card is its own scroll container. Once a card's header has scrolled past
+    // its top edge, the card wears `.scrolled` and the CSS fades its tab back in.
+    sections.forEach((section) => {
+        const header = section.querySelector(".section-header");
+        if (!header) return;
 
-        const finish = () => {
-            slider.hidden = true;
-            isOpen = false;
+        let ticking = false;
+        const update = () => {
+            ticking = false;
+            // offsetTop is measured against .section itself, which is the offset parent.
+            const headerBottom = header.offsetTop + header.offsetHeight;
+            section.classList.toggle("scrolled", section.scrollTop >= headerBottom);
         };
 
-        if (reduceMotion) {
-            gsap.set(slider, { xPercent: 100 });
-            finish();
-            return;
-        };
+        section.addEventListener("scroll", () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(update);
+        }, { passive: true });
 
-        gsap.to(slides.children, {
-            autoAlpha: 0,
-            y: 24,
-            onComplete: finish,
-        });
-
-        gsap.to(slider, {
-            xPercent: 100,
-            duration: 0.5,
-            ease: "power3.in",
-            onComplete: finish,
-        });
-
-    };
-
-    tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-            [...tabs].filter(i => i !== tab).forEach(i => i.classList.remove("open"));
-            tab.classList.add("open");
-            openSlider(tab.dataset.slide);
-        });
+        update();
     });
 
-    sliderClose.addEventListener("click", () => {
-        closeSlider();
-        tabs.forEach((tab) => tab.classList.remove("open"));
+    measure();
+    layout(sections.find((s) => s.classList.contains("current")) || sections[0], false);
+
+    document.querySelector(".main").addEventListener("click", (e) => {
+        const wrapper = e.target.closest(".section-nav-wrapper");
+        if (wrapper) activate(wrapper.closest(".section"));
     });
 
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && isOpen) {
-            closeSlider();
-            tabs.forEach((tab) => tab.classList.remove("open"));
-        }
+    // Slot width is in rem, so it only changes if the root font size does.
+    window.addEventListener("resize", () => {
+        measure();
+        layout(document.querySelector(".section.current") || sections[0], false);
     });
 };
 
@@ -149,8 +137,7 @@ const backgroundParallax = () => {
 window.addEventListener("load", () => {
     history.scrollRestoration = "manual";
     documentHeight();
-    // slider();
-    // backgroundParallax();
+    handleSections();
 });
 
 window.addEventListener("resize", () => {
