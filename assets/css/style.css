@@ -155,7 +155,6 @@ main {
     position: sticky;
     left: 0;
     top: 0;
-    cursor: pointer;
 }
 
 .section-nav-tab {
@@ -176,12 +175,13 @@ main {
     background: var(--color-white);
     white-space: nowrap;
     padding: 2rem .5rem;
-    cursor: pointer;
+    cursor: alias;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .section.current .section-nav-tab {
     opacity: 0;
+    cursor: default;
 }
 
 .section.current.scrolled .section-nav-tab {

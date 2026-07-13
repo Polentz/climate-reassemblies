@@ -2,7 +2,8 @@
     --doc-height: 100%;
     --color-black: #000000;
     --color-white: #ffffff;
-    --color-button: #fff7c4;
+    /* --color-button: #fff7c4; */
+    --color-button: #ffffff;
 
     --color-scheme-background: #f4f4ee;
     --color-scheme-primary: #07006d;
@@ -41,19 +42,89 @@
     letter-spacing: 4px;
 }
 
-.item-label:hover .interactive-button {
-    display: block;
+.interactive-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    white-space: nowrap;
+    /* background-color: var(--color-button); */
+    color: var(--color-black);
+    border-radius: 999px;
+
+    /* collapsed state: no width, no padding, so it takes up no room in the flow */
+    max-width: 0;
+    padding: .5rem 0;
+    opacity: 0;
+    transform: translateX(-.75rem) scale(.92);
+    filter: blur(3px);
+    pointer-events: none;
+
+    transition:
+        max-width .5s cubic-bezier(.22, 1, .36, 1),
+        padding .5s cubic-bezier(.22, 1, .36, 1),
+        transform .5s cubic-bezier(.34, 1.56, .64, 1),
+        opacity .3s ease,
+        filter .3s ease;
 }
 
-.interactive-button {
-    cursor: pointer;
-    transition: all .3s ease;
-    display: none;
+/* the sweep of light that crosses the pill once it is revealed */
+/* .interactive-button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg,
+            transparent 30%,
+            rgba(255, 255, 255, .85) 50%,
+            transparent 70%);
+    transform: translateX(-120%);
+} */
+
+.item-label:hover .interactive-button,
+.item-label:focus-within .interactive-button {
+    max-width: 12rem;
+    padding: .5rem 1rem;
+    opacity: 1;
+    transform: none;
+    filter: none;
+    pointer-events: auto;
+}
+
+/* .item-label:hover .interactive-button::after,
+.item-label:focus-within .interactive-button::after {
+    transition: transform .7s ease .15s;
+    transform: translateX(120%);
+} */
+
+.interactive-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
+}
+
+.interactive-button:active {
+    transform: translateY(0) scale(.96);
+    transition-duration: .1s;
 }
 
 .interactive-icon svg {
     height: 1rem;
-    cursor: pointer;
+    transition: transform .75s cubic-bezier(.22, 1, .36, 1);
+}
+
+.item-label:hover .interactive-icon svg {
+    transform: rotate(360deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .interactive-button,
+    .interactive-button::after,
+    .interactive-icon svg {
+        transition-duration: .01ms;
+        transform: none;
+        filter: none;
+    }
 }
 
 .full-height {

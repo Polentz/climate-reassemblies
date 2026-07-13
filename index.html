@@ -15,6 +15,7 @@
     <noscript>Please turn on JS to navigate this website</noscript>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/SplitText.min.js"></script>
     <script src="assets/js/script.js" defer></script>
     <!-- <script src="assets/js/app.js" defer></script> -->
 </head>
@@ -32,27 +33,6 @@
                 target="_blank">Lexicon</a></button>
         <button class="nav-button">Resources</button>
     </nav>
-
-    <!-- <menu class="sidebar" aria-label="Sections">
-        <button class="sidebar-tab" data-slide="1">ReAssemble</button>
-        <button class="sidebar-tab" data-slide="0">Information</button>
-    </menu> -->
-
-    <!-- <div class="slider" id="slider" hidden>
-        <button class="slider-close" aria-label="Close">&times;</button>
-        <div class="slider-track">
-            <section class="slide" id="slide-1">
-                <h2 class="text-style-h2">ReAssemble</h2>
-                <p class="text-style-p">Collect here from the website notes and tools you need to draft your path
-                    through the re-assembly process.</p>
-                <p class="text-style-label">No items yet</p>
-            </section>
-            <section class="slide" id="slide-0">
-                <h2 class="text-style-h2">Climate ReAssemblies</h2>
-                <p class="text-style-p">Personal projects I am proud of having worked on.</p>
-            </section>
-        </div>
-    </div> -->
 
     <main class="main">
         <section class="section current">
@@ -83,8 +63,8 @@
                                     inclusive, deliberative and active modes of citizenship in relation to climate
                                     change and just transitions. In doing so it puts social and environmental justice
                                     centre stage.</h3>
-                                <div class="item-label text-style-label">
-                                    <p>Definition</p>
+                                <div class="item-label">
+                                    <p class="text-style-label">Definition</p>
                                     <span class="interactive-icon">
                                         <svg fill="none" viewBox="0 0 30 30" width="30"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -93,9 +73,9 @@
                                                 fill="#181818"></path>
                                         </svg>
                                     </span>
-                                    <span class="interactive-button" data-action="add-to-slide">
+                                    <p class="interactive-button text-style-label" data-action="add-to-slide">
                                         Collect
-                                    </span>
+                                    </p>
                                 </div>
                             </div>
                             <div class="flex-column-item">
@@ -446,4 +426,6 @@
             </div>
         </section> -->
     </main>
+
+    <footer></footer>
 </body>
