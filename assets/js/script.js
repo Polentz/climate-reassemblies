@@ -149,7 +149,7 @@ const backgroundParallax = () => {
 window.addEventListener("load", () => {
     history.scrollRestoration = "manual";
     documentHeight();
-    slider();
+    // slider();
     // backgroundParallax();
 });
 

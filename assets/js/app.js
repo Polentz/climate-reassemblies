@@ -20,7 +20,7 @@ const state = {
   initialOrder: [],
   gapUnit: 5,
   letterGap: 2, // 2x unit
-  wordGap: 90,   // 6x unit
+  wordGap: 2,   // 6x unit
   cycleCount: 0
 };
 
@@ -130,9 +130,9 @@ function setupAbsoluteSlots(glyphs) {
 }
 
 // Utility to clamp a value
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(min, value));
-}
+// function clamp(value, min, max) {
+//   return Math.min(max, Math.max(min, value));
+// }
 
 // Calculates target indices for selected glyphs and prevents offscreen
 function computeXPositionsForOrder(order) {
@@ -452,7 +452,7 @@ function restoreInitialState() {
 window.addEventListener('DOMContentLoaded', () => {
   const glyphs = createGlyphs(PHRASE);
   setupAbsoluteSlots(glyphs);
-  // startScheduler();
+  startScheduler();
 });
 
 lineEl.addEventListener("mouseenter", () => {

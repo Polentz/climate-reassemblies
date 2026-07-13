@@ -8,12 +8,12 @@
     --color-scheme-primary: #07006d;
     --color-scheme-secondary: #dde3eb;
 
-    --letter-spacing: 2px;
+    --letter-spacing: 0px;
 }
 
 .text-style-h2 {
     font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
-    font-size: 4rem;
+    font-size: 8rem;
     line-height: 1.2;
 }
 
@@ -32,24 +32,28 @@
 }
 
 .text-style-label {
-    width: 100%;
-    font-family: "Inter", sans-serif;
+    font-family: "Apercu Bold", sans-serif;
     font-weight: 700;
     font-style: bold;
     font-size: .9rem;
     line-height: 1.2;
     text-transform: uppercase;
-    text-align: start;
+    letter-spacing: 4px;
+}
+
+.item-label:hover .interactive-button {
+    display: block;
 }
 
 .interactive-button {
     cursor: pointer;
     transition: all .3s ease;
+    display: none;
 }
 
-.interactive-button:hover {
+.interactive-icon svg {
+    height: 1rem;
     cursor: pointer;
-    transition: all .3s ease;
 }
 
 .full-height {
@@ -60,4 +64,18 @@
     position: sticky;
     top: 12rem;
     /* top: 0; */
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+}
+
+.flex-column-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: solid 1px var(--color-black);
 }
