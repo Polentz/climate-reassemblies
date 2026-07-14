@@ -103,6 +103,80 @@ const handleSections = () => {
     });
 };
 
+const handleExcerpts = () => {
+    const EXCERPT_LENGTH = 500;
+
+    const excerpt = (text, limit = EXCERPT_LENGTH) => {
+        const clean = text.replace(/\s+/g, " ").trim();
+        if (clean.length <= limit) return clean;
+        const cut = clean.slice(0, limit);
+        // Back up to the last space so the excerpt never ends mid-word.
+        return `${cut.slice(0, cut.lastIndexOf(" "))}…`;
+    };
+
+    const container = document.querySelector("#collection-container");
+    if (!container) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    container.querySelectorAll(".collection-content").forEach((content) => {
+        const full = content.innerHTML;
+        const short = `<p>${excerpt(content.textContent)}</p>`;
+
+        // Nothing to reveal if the copy already fits inside the excerpt.
+        const item = content.closest(".collection-item");
+        const toggle = item.querySelector(".interactive-item");
+        if (short === full || !toggle) return;
+
+        content.dataset.full = full;
+        content.dataset.excerpt = short;
+        content.innerHTML = short;
+
+        toggle.setAttribute("role", "button");
+        toggle.setAttribute("tabindex", "0");
+        toggle.setAttribute("aria-expanded", "false");
+    });
+
+    const toggleExcerpt = (item) => {
+        const content = item.querySelector(".collection-content");
+        const toggle = item.querySelector(".interactive-item");
+        if (!content?.dataset.full) return;
+
+        const expanded = item.classList.toggle("expanded");
+        toggle.setAttribute("aria-expanded", String(expanded));
+
+        // Measure the height we're leaving, swap the copy, then measure the height
+        // we're heading to — gsap animates between the two.
+        const from = content.offsetHeight;
+        content.innerHTML = expanded ? content.dataset.full : content.dataset.excerpt;
+
+        if (reduced) return;
+
+        gsap.set(content, { height: "auto" });
+        const to = content.offsetHeight;
+
+        gsap.fromTo(content,
+            { height: from },
+            { height: to, duration: 0.6, ease: "power3.inOut", overwrite: true, clearProps: "height" });
+        gsap.fromTo(content.children,
+            { opacity: 0, y: 12 },
+            { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: "power2.out", delay: 0.12, clearProps: "all" });
+    };
+
+    container.addEventListener("click", (e) => {
+        const toggle = e.target.closest(".interactive-item");
+        if (toggle) toggleExcerpt(toggle.closest(".collection-item"));
+    });
+
+    container.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        const toggle = e.target.closest(".interactive-item");
+        if (!toggle) return;
+        e.preventDefault(); // Space would otherwise scroll the card.
+        toggleExcerpt(toggle.closest(".collection-item"));
+    });
+};
+
 const backgroundParallax = () => {
     // Respect users who prefer reduced motion — skip the effect entirely.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -139,6 +213,7 @@ window.addEventListener("load", () => {
     history.scrollRestoration = "manual";
     documentHeight();
     handleSections();
+    handleExcerpts();
 });
 
 window.addEventListener("resize", () => {
