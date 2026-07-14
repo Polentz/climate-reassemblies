@@ -197,6 +197,8 @@ const handleCollection = () => {
         thumbnail.src = image.getAttribute("src");
         thumbnail.alt = image.getAttribute("alt") || "";
         thumbnail.loading = "lazy";
+        // Images drag themselves by default, which would hijack the card's own drag.
+        thumbnail.draggable = false;
         content.append(thumbnail);
 
         const caption = source.querySelector("figcaption")?.textContent.trim();
@@ -214,6 +216,9 @@ const handleCollection = () => {
         const item = template.content.firstElementChild.cloneNode(true);
         const { type = "", category = "" } = source.dataset;
 
+        // The item carries its source id so the running order can be read straight off
+        // the DOM after a drag and written back to storage.
+        item.dataset.id = source.dataset.id;
         item.dataset.type = type;
         item.querySelector("[data-label='category']").textContent = category;
         item.querySelector("[data-label='type']").textContent = type;
@@ -349,7 +354,8 @@ const handleCollection = () => {
     // page, then write the surviving ids back so the stale ones don't linger in storage.
     const restore = () => {
         const restored = readStore().filter((id) => {
-            const source = document.querySelector(`[data-id="${CSS.escape(id)}"]`);
+            // Collected items carry their source id too, so rule them out of the lookup.
+            const source = document.querySelector(`[data-id="${CSS.escape(id)}"]:not(.collection-item)`);
             if (!source || source.dataset.collected === "true") return false;
             markCollected(source);
             collect(source);
@@ -360,6 +366,90 @@ const handleCollection = () => {
     };
 
     const collected = restore();
+
+    // Storage holds the running order, so re-read it off the DOM whenever that changes.
+    const saveOrder = () => {
+        collected.length = 0;
+        collected.push(...[...container.children].map((item) => item.dataset.id));
+        writeStore(collected);
+    };
+
+    // Reorder by dragging. The card follows the cursor as the browser's drag image; what
+    // moves in the DOM is the real card, slotting in wherever the cursor currently is.
+    let dragged = null;
+
+    // The card the cursor is above the top half of — the one to drop in front of.
+    // Nothing means the cursor is past the last card, so the drop goes at the end.
+    const cardAfter = (y) => [...container.children]
+        .filter((item) => item !== dragged)
+        .find((item) => {
+            const box = item.getBoundingClientRect();
+            return y < box.top + box.height / 2;
+        }) ?? null;
+
+    // Run a DOM move, then walk the cards back from where they were to where they now are
+    // and let gsap play that gap out — so they slide aside instead of snapping.
+    const slideIntoPlace = (move) => {
+        const cards = [...container.children];
+        const before = new Map(cards.map((card) => [card, card.getBoundingClientRect().top]));
+
+        move();
+        if (reduced) return;
+
+        cards.forEach((card) => {
+            // The dragged card is already under the cursor; animating it would fight that.
+            if (card === dragged) return;
+
+            const delta = before.get(card) - card.getBoundingClientRect().top;
+            if (!delta) return;
+
+            gsap.fromTo(card, { y: delta }, {
+                y: 0,
+                duration: 0.35,
+                ease: "power2.out",
+                overwrite: true,
+                // The card's CSS transition on transform would smear gsap's per-frame
+                // writes, so it stands down until the tween is finished.
+                onStart: () => card.classList.add("settling"),
+                onComplete: () => {
+                    card.classList.remove("settling");
+                    gsap.set(card, { clearProps: "transform" });
+                },
+            });
+        });
+    };
+
+    container.addEventListener("dragstart", (e) => {
+        dragged = e.target.closest(".collection-item");
+        if (!dragged) return;
+
+        e.dataTransfer.effectAllowed = "move";
+        // Firefox refuses to start a drag unless the transfer carries something.
+        e.dataTransfer.setData("text/plain", dragged.dataset.id ?? "");
+        // Held to the next frame so the browser snapshots the card at full strength.
+        requestAnimationFrame(() => dragged?.classList.add("dragging"));
+    });
+
+    container.addEventListener("dragover", (e) => {
+        if (!dragged) return;
+        e.preventDefault(); // Without this the container refuses the drop.
+        e.dataTransfer.dropEffect = "move";
+
+        const next = cardAfter(e.clientY);
+        if (next === dragged.nextElementSibling || next === dragged) return;
+        slideIntoPlace(() => container.insertBefore(dragged, next));
+    });
+
+    // The drop itself is already done — the card moved on dragover. This just stops the
+    // browser treating the drag as a navigation.
+    container.addEventListener("drop", (e) => e.preventDefault());
+
+    container.addEventListener("dragend", () => {
+        if (!dragged) return;
+        dragged.classList.remove("dragging");
+        dragged = null;
+        saveOrder();
+    });
 
     // Collecting is delegated from the page, so any source added later works for free.
     // The asterisk and the "Collect" button are the same gesture — either one collects.

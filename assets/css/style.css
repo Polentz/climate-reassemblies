@@ -149,15 +149,33 @@ h1 {
 }
 
 .collection-item {
-    padding: 2rem;
+    background: var(--color-white);
     border-radius: 30px;
     box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
+    padding: 2rem;
     cursor: move;
     transition: transform .5s cubic-bezier(.34, 1.56, .64, 1);
 }
 
 .collection-item:hover {
     transform: translateY(-4px);
+}
+
+/* The card left behind while its drag image follows the cursor. */
+.collection-item.dragging {
+    opacity: 1;
+    box-shadow: none;
+}
+
+/* While gsap slides a card into its new slot it owns the transform outright — the
+   transition above would otherwise smear every frame it writes. */
+.collection-item.dragging,
+.collection-item.settling {
+    transition: none;
+}
+
+.collection-item.settling:hover {
+    transform: none;
 }
 
 .collection-item .interactive-item {
@@ -173,8 +191,6 @@ h1 {
     transition: transform .5s cubic-bezier(.22, 1, .36, 1);
 }
 
-/* The script sets aria-expanded on the header only when the item is holding copy
-   back, so the arrow invites a click on those items and stays inert on the rest. */
 .interactive-item[aria-expanded] .collection-icon {
     cursor: pointer;
 }
@@ -182,13 +198,6 @@ h1 {
 .interactive-item[aria-expanded]:hover .collection-icon svg {
     transform: rotate(90deg);
 }
-
-/* Declared after the hover rule so it wins at equal specificity: an expanded
-   item keeps its arrow pointing up, hovered or not. */
-/* .collection-item.expanded .collection-icon svg,
-.collection-item.expanded .interactive-item:hover .collection-icon svg {
-    transform: rotate(90deg);
-} */
 
 .collection-content {
     display: flex;
