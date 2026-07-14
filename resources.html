@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate ReAssemblies</title>
+    <meta name="description"
+        content="Climate ReAssemblies is a project that explores the intersection of climate change, art, and technology. Through a series of interactive installations and workshops, we aim to engage the public in meaningful conversations about the impact of climate change on our environment and society.">
+    <link rel="stylesheet" href="https://use.typekit.net/gof7fem.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/font.css">
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <noscript>Please turn on JS to navigate this website</noscript>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/SplitText.min.js"></script>
+    <script src="assets/js/script.js" defer></script>
+    <!-- <script src="assets/js/app.js" defer></script> -->
+</head>
+
+<body>
+
+    <header>
+        <h1 id="line">Climate ReAssemblies</h1>
+    </header>
+
+    <nav class="nav" aria-label="Main navigation">
+        <a class="button nav-button">En/De</a>
+        <button class="button nav-button">Search</button>
+        <a class="button nav-button" href="https://climatereassemblieslexicon.sheffield.ac.uk/define"
+            target="_blank">Lexicon</a>
+        <a class="button nav-button" href="index.html">Overview</a>
+    </nav>
+
+    <!-- The deck is the page's scroll runway: it is as tall as the viewport plus however
+         far the current card's content has to travel. The card itself sticks to the top of
+         it, so the window is the only thing that ever scrolls. -->
+    <div class="deck">
+        <main class="main">
+            <section id="overview-section" class="section current">
+                <div class="section-nav-wrapper">
+                    <h2 class="section-nav-tab" role="tab" tabindex="0">Resources</h2>
+                </div>
+                <div class="section-layout-wrapper">
+                    <div class="section-header">
+                        <h2 class="text-style-h2">Resources</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-content-body">
+                            <div class="gallery-grid">
+                                <div class="preview-item" data-type="Resources" data-category="Interview"
+                                    data-id="source-1">
+                                    <h3 class="text-style-h3">ReStaging Climate Assemblies Interview: Katie Reid
+                                    </h3>
+                                    <video class="video" src="./media/katie-reid.mp4" autoplay muted loop
+                                        controlslist="noplaybackrate nodownload" controls disablePictureInPicture
+                                        type="video"></video>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="preview-item-wrapper">
+                                    <div class="preview-item-header">
+                                        <p class="text-style-label">Interviews</p>
+                                        <h3 class="text-style-h3">ReStaging Climate Assemblies Interview: Katie Reid
+                                        </h3>
+                                        <p class="text-style-caption">Attendees: Ashley Mason, Jayne Carrick, Katie Reid
+                                        </p>
+                                    </div>
+                                    <div class="preview-item-description text-style-p">
+                                        <p>Katie Reid is Researcher and Advisor in the Youth Climate Justice Project,
+                                            University College Cork.</p>
+                                        <p>Katie has worked for the University of Edinburgh, Dublin City University and
+                                            University College Cork in different research projects since 2020. She is
+                                            also a children's rights practitioner and currently works as the Adviser -
+                                            Children's Rights, Climate and Democracy for the Child Rights International
+                                            Network (CRIN).</p>
+                                        <p>Katie holds an MSc in Childhood Studies and an MA (with Honours) in Social
+                                            Anthropology and Sustainable Development from the University of Edinburgh.
+                                            Her research focusses on child and youth participation in decision-making
+                                            processes related to climate change, the environment and biodiversity.</p>
+                                    </div>
+                                </div>
+                                <!-- <figure class="gallery-item">
+                                    <img src="./media/sample-2.png">
+                                    <figcaption class="text-style-caption" hidden>This is a caption</figcaption>
+                                </figure> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="german-section" class="section">
+                <div class="section-nav-wrapper">
+                    <h2 class="section-nav-tab" role="tab" tabindex="0">German Assemblies</h2>
+                </div>
+                <div class="section-layout-wrapper">
+                    <div class="section-header">
+                        <h2 class="text-style-h2">German Assemblies</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-content-body">
+                            <div class="flex-column">
+                                <div class="flex-column-item">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed
+                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                        sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex
+                                        sapien
+                                        vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
+                                        Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec
+                                        metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc
+                                        posuere.
+                                        Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per
+                                        conubia
+                                        nostra inceptos himenaeos.</p>
+                                </div>
+                            </div>
+                            <div class="flex-column-item" data-type="German Assemblies" data-category="Quotation"
+                                data-id="source-4">
+                                <blockquote class="text-style-quote">
+                                    &ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&rdquo;
+                                    <p class="text-style-label">This is a quotation</p>
+                                </blockquote>
+                                <div class="interactive-item">
+                                    <span class="interactive-icon">
+                                        <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                fill="#000000"></path>
+                                        </svg>
+                                    </span>
+                                    <button class="button interactive-button text-style-label"
+                                        data-action="add-to-collection">
+                                        Collect
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div class="grid-item span-2" data-type="German Assemblies" data-category="Article"
+                                    data-id="source-5">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed
+                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                        sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex
+                                        sapien
+                                        vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
+                                        Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec
+                                        metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc
+                                        posuere.
+                                        Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per
+                                        conubia
+                                        nostra inceptos himenaeos.</p>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid-item span-2" data-type="German Assemblies" data-category="Article"
+                                    data-id="source-6">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed
+                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                        sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex
+                                        sapien
+                                        vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
+                                        Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec
+                                        metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc
+                                        posuere.
+                                        Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per
+                                        conubia
+                                        nostra inceptos himenaeos.</p>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="grid-item" data-type="German Assemblies" data-category="Tool"
+                                    data-id="source-7">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.</p>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid-item" data-type="German Assemblies" data-category="Tool"
+                                    data-id="source-8">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.</p>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid-item" data-type="German Assemblies" data-category="Tool"
+                                    data-id="source-9">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.</p>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid-item" data-type="German Assemblies" data-category="Tool"
+                                    data-id="source-10">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.</p>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="uk-section" class="section">
+                <div class="section-nav-wrapper">
+                    <h2 class="section-nav-tab" role="tab" tabindex="0">UK Assemblies</h2>
+                </div>
+                <div class="section-layout-wrapper">
+                    <div class="section-header">
+                        <h2 class="text-style-h2">UK Assemblies</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-content-body">
+                            <div class="flex-column">
+                                <div class="flex-column-item">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed
+                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                        sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex
+                                        sapien
+                                        vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
+                                        Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec
+                                        metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc
+                                        posuere.
+                                        Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per
+                                        conubia
+                                        nostra inceptos himenaeos.</p>
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div class="grid-item span-2" data-type="UK Assemblies" data-category="Article"
+                                    data-id="source-11">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed
+                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                        sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex
+                                        sapien
+                                        vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
+                                        Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec
+                                        metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc
+                                        posuere.
+                                        Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per
+                                        conubia
+                                        nostra inceptos himenaeos.</p>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid-item span-2" data-type="UK Assemblies" data-category="Article"
+                                    data-id="source-12">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed
+                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                        sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex
+                                        sapien
+                                        vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
+                                        Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec
+                                        metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc
+                                        posuere.
+                                        Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per
+                                        conubia
+                                        nostra inceptos himenaeos.</p>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-column">
+                                <div class="flex-column-item" data-type="UK Assemblies" data-category="Quotation"
+                                    data-id="source-13">
+                                    <blockquote class="text-style-quote">
+                                        &ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&rdquo;
+                                        <p class="text-style-label">This is a quotation</p>
+                                    </blockquote>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex-column-item">
+                                    <h3 class="text-style-h3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed
+                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                        sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
+                                    <p class="text-style-p">Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                                        Quisque
+                                        faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium
+                                        tellus
+                                        duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+                                        fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia
+                                        integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
+                                        litora torquent per conubia nostra inceptos himenaeos.
+                                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex
+                                        sapien
+                                        vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
+                                        Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec
+                                        metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc
+                                        posuere.
+                                        Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per
+                                        conubia
+                                        nostra inceptos himenaeos.</p>
+                                </div>
+                            </div>
+                            <div class="gallery-grid">
+                                <figure class="gallery-item" data-type="UK Assemblies" data-category="Documentation"
+                                    data-id="source-14">
+                                    <img src="./media/sample-1.png">
+                                    <figcaption class="text-style-caption" hidden>This is a caption</figcaption>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </figure>
+                                <figure class="gallery-item">
+                                    <img src="./media/sample-2.png">
+                                    <figcaption class="text-style-caption" hidden>This is a caption</figcaption>
+                                </figure>
+                                <figure class="gallery-item">
+                                    <img src="./media/sample-3.png">
+                                    <figcaption class="text-style-caption" hidden>This is a caption</figcaption>
+                                </figure>
+                                <figure class="gallery-item">
+                                    <img src="./media/sample-4.png">
+                                    <figcaption class="text-style-caption" hidden>This is a caption</figcaption>
+                                </figure>
+                                <figure class="gallery-item">
+                                    <img src="./media/sample-5.png">
+                                    <figcaption class="text-style-caption" hidden>This is a caption</figcaption>
+                                </figure>
+                                <figure class="gallery-item" data-type="UK Assemblies" data-category="Documentation"
+                                    data-id="source-15">
+                                    <img src="./media/sample-6.png">
+                                    <figcaption class="text-style-caption" hidden>This is a caption</figcaption>
+                                    <div class="interactive-item">
+                                        <span class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span>
+                                        <button class="button interactive-button text-style-label"
+                                            data-action="add-to-collection">
+                                            Collect
+                                        </button>
+                                    </div>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="interactive-section" class="section">
+                <div class="section-nav-wrapper">
+                    <h2 class="section-nav-tab" role="tab" tabindex="0">Collect and ReAssemble</h2>
+                </div>
+                <div class="section-layout-wrapper">
+                    <div class="section-header">
+                        <h2 class="text-style-h2">Collect and ReAssemble</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-content-body">
+                            <div class="flex-column">
+                                <div class="flex-column-item">
+                                    <h3 class="text-style-h3">This is your collection area, where you can save and
+                                        reassemble items from across the platform to create your own journey through the
+                                        Climate ReAssemblies tools, resources, and experiences.</h3>
+                                    <h3 class="text-style-h3">Whenever it appears, click the <span
+                                            class="interactive-icon">
+                                            <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                    fill="#000000"></path>
+                                            </svg>
+                                        </span> button to add items to your collection.<br>Return here anytime to
+                                        review,
+                                        explore, and reassemble.</h3>
+                                </div>
+                            </div>
+                            <div id="collection" class="flex-column">
+                                <ul id="collection-container" class="flex-column-item"></ul>
+                                <template id="collection-item-template">
+                                    <li class="collection-item" draggable="true">
+                                        <button class="collection-remove" type="button" data-action="remove"
+                                            aria-label="Remove from collection">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+                                                <path
+                                                    d="M20.9,18.2c1.7,1.7,1.1,2.7.6,3.2-.3.3-.7.5-1.2.5-.6,0-1.3-.4-2.1-1.1-.5-.5-5.2-6.2-7.2-8.8h0c-2.1,2.6-6.7,8.3-7.2,8.8-.7.7-1.4,1.1-2.1,1.1s-.8-.2-1.2-.5C0,21-.1,20.3.1,19.6c.2-.4.5-.9,1-1.4.5-.5,6.2-5.2,8.8-7.2h0C7.3,8.9,1.6,4.3,1.1,3.7c-.5-.5-.8-.9-1-1.4C-.1,1.7,0,1,.5.5,1.3-.3,2.5-.1,3.7,1.1c.5.5,5.2,6.2,7.2,8.8h0c2.1-2.6,6.7-8.3,7.2-8.8,1.2-1.2,2.4-1.4,3.2-.6s1.1,1.6-.6,3.2c-.5.5-6.2,5.2-8.8,7.2h0c2.6,2,8.3,6.7,8.8,7.2Z" />
+                                            </svg>
+                                        </button>
+                                        <!-- The labels always show; the arrow beside them is the toggle, and it
+                                         only surfaces on hover, and only on a card that can open. -->
+                                        <div class="collection-header">
+                                            <div class="interactive-item">
+                                                <span class="collection-icon">
+                                                    <svg viewBox="0 0 27 22" xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                        <clipPath>
+                                                            <path d="m0 0h26.13v21.46h-26.13z"></path>
+                                                        </clipPath>
+                                                        <path
+                                                            d="m17.86 19.54c1.46-1.9 4.82-6.27 8.26-8.8-3.61-2.47-6.88-6.91999-8.3-8.83999-.33-.44-.58-.79-.67-.88-1.11-1.1100017-2.16-1.320008-2.89-.600008-.2088.201021-.3507.461527-.4061.746038-.0555.28452-.0219.57921.0961.84397.2033.49252.5142.93329.91 1.29.38.38 3.22 2.67 8 6.46l.53.41999h-.68c-4.48.15-13.56-.56999-17.92-.91999-1.26-.1-2.17-.17-2.34-.17-1.610003 0-2.45.55999-2.45 1.61999s.839997 1.61 2.45 1.61c.2 0 1.44-.08 3.17-.2 4.62-.31 13.23-.89 17.08-.89h.72l-.56.45c-1.74 1.37-7.44 5.89-8 6.45-.3935.3649-.7068.8076-.92 1.3-.1131.2648-.1431.5576-.086.8398.0572.2822.1988.5403.406.7402.73.73 1.76.53 2.88-.59.1-.07.37-.43.72-.88z"
+                                                            fill="#000000"></path>
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            <span class="text-style-label" data-label="category"></span>
+                                            <span class="text-style-icon">
+                                                <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="m27.1148 13.1344c-.7476 0-6.9562.7101-10.2492 1.0945 2.5992-2.0578 7.4907-5.94609 8.0227-6.47577 1.664-1.66641 1.0875-2.74219.5953-3.23438-.8156-.81562-2.0039-.6375-3.2344.59531-.5297.52969-4.4179 5.42114-6.4758 8.02034.3821-3.29299 1.0946-9.50159 1.0946-10.24924 0-2.357816-1.1696-2.709379-1.8657-2.709379-.696 0-1.8656.351563-1.8656 2.709379 0 .74765.7102 6.95859 1.0922 10.24924-2.0578-2.5992-5.94609-7.49065-6.47577-8.02034-1.23282-1.23281-2.41875-1.41093-3.23438-.59531-.50156.50156-.63516 1.15781-.37734 1.84687.16406.43829.49218.90469.97265 1.38751.52969.52968 5.42114 4.41557 8.02034 6.47347-3.29299-.3821-9.50159-1.0946-10.25159-1.0946-2.355466.0024-2.707029 1.1719-2.707029 1.868s.351563 1.8656 2.707029 1.8656c.75 0 6.95625-.7101 10.24919-1.0922-2.5992 2.0579-7.49059 5.9461-8.02028 6.4758-.48047.4805-.80859.9469-.97266 1.3852-.26015.6914-.12422 1.3476.37735 1.8469.33281.3304.73828.5085 1.17422.5085.6375 0 1.3289-.3703 2.06015-1.1015.52969-.5297 4.41802-5.4235 6.47582-8.0227-.3821 3.293-1.0922 9.5016-1.0922 10.2516 0 2.3555 1.1695 2.707 1.8656 2.707s1.8656-.3515 1.8656-2.707c0-.75-.7101-6.9563-1.0945-10.2492 2.0578 2.5992 5.9461 7.4906 6.4758 8.0203.7312.7312 1.425 1.1015 2.0625 1.1015.4359 0 .8414-.1757 1.1719-.5085.4921-.4922 1.071-1.568-.5954-3.2344-.5296-.5297-5.4211-4.418-8.0226-6.4758 3.2929.382 9.5015 1.0922 10.2492 1.0922 2.3578 0 2.7094-1.1672 2.7094-1.8656.0023-.6938-.3492-1.8633-2.7071-1.8633z"
+                                                        fill="#000000"></path>
+                                                </svg>
+                                            </span>
+                                            <span class="text-style-label" data-label="type"></span>
+                                        </div>
+                                        <div class="collection-content"></div>
+
+                                    </li>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-layout-wrapper">
+            <div class="footer-top">
+                <div class="footer-block footer-contact">
+                    <h2 class="text-style-h2">
+                        Climate ReAssemblies<br>
+                    </h2>
+                    <h3 class="text-style-h3">
+                        University of Tübingen<br>
+                        University of Sheffield
+                    </h3>
+                    <ul class="footer-links">
+                        <li><a class="text-style-p"
+                                href="mailto:inf@oclimatereassemblies.com">inf@oclimatereassemblies.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-block footer-partners">
+                    <h2 class="text-style-label">Partners</h2>
+                    <ul class="footer-partner-list">
+                        <li class="footer-partner">
+                            <img src="./media/logo.svg" alt="University of Sheffield">
+                            <figcaption class="text-style-caption"><a href="" target="_blank"
+                                    rel="noopener noreferrer">University of Sheffield</a></figcaption>
+                        </li>
+                        <li class="footer-partner">
+                            <img src="./media/logo.svg" alt="University of Tübingen">
+                            <figcaption class="text-style-caption"><a href="" target="_blank"
+                                    rel="noopener noreferrer">University of Tübingen</a></figcaption>
+                        </li>
+                        <li class="footer-partner">
+                            <img src="./media/logo.svg" alt="Arts and Humanities Research Council">
+                            <figcaption class="text-style-caption"><a href="" target="_blank"
+                                    rel="noopener noreferrer">ABC Institute</a></figcaption>
+                        </li>
+                        <li class="footer-partner">
+                            <img src="./media/logo.svg" alt="Deutsche Forschungsgemeinschaft">
+                            <figcaption class="text-style-caption"><a href="" target="_blank"
+                                    rel="noopener noreferrer">Foundation XYZ</a></figcaption>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-block footer-credits">
+                    <h2 class="text-style-label">Credits</h2>
+                    <ul class="footer-credit-list">
+                        <li class="text-style-caption"><span class="text-style-label">Thanks to</span><br>All workshop
+                            participants and facilitators</li>
+                        <li class="text-style-caption"><span class="text-style-label">Climate ReAssemblies
+                                Lexicon Design</span><br>Paul Baule
+                        </li>
+                        <li class="text-style-caption"><span class="text-style-label">Website Design &amp;
+                                Code</span><br>Giulia
+                            Polenta</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="text-style-caption">&copy; 2026 Climate ReAssemblies. All rights reserved.</p>
+                <ul class="footer-legal">
+                    <li><a class="text-style-caption" href="#">Privacy policy</a></li>
+                    <li><a class="text-style-caption" href="#">Accessibility</a></li>
+                    <li><a class="text-style-caption" href="#">Transparency</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>

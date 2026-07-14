@@ -350,6 +350,7 @@ const handleCollection = () => {
         const button = source.querySelector("[data-action='add-to-collection']");
         if (button) button.textContent = "Collected";
         if (button) button.style.pointerEvents = "none";
+        if (button) button.classList.add("collected");
     };
 
     // Hand the source back: its asterisk can collect it again.
@@ -361,6 +362,7 @@ const handleCollection = () => {
         const button = source.querySelector("[data-action='add-to-collection']");
         if (button) button.textContent = "Collect";
         if (button) button.style.pointerEvents = "all";
+        if (button) button.classList.remove("collected");
     };
 
     // Rebuild the saved collection, dropping any id whose source is no longer on the

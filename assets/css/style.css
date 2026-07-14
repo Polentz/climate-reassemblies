@@ -125,7 +125,8 @@ h1 {
 }
 
 .interactive-item:hover .interactive-button,
-.interactive-item:focus-within .interactive-button {
+.interactive-item:focus-within .interactive-button,
+.interactive-button.collected {
     --button-shift: 0rem;
     max-width: 12rem;
     padding: .5rem 1rem;
@@ -227,11 +228,6 @@ h1 {
     gap: 1rem;
 }
 
-/* At rest the arrow takes up no room at all: it is clamped to zero width and clipped,
-   which is as good as display:none but, unlike display, can be animated. The negative
-   margin swallows the header's gap, so a collapsed arrow leaves nothing behind — and it
-   unwinds on hover, which is what pushes the labels aside as the arrow arrives.
-   Only a card with something to open ever gets there. */
 .collection-item .interactive-item {
     width: auto;
     align-self: unset;
@@ -248,9 +244,6 @@ h1 {
         filter .3s ease;
 }
 
-/* :focus-visible, not :focus-within — a mouse click focuses the arrow, and :focus-within
-   would then keep it on screen after the pointer has left. This way only keyboard focus
-   holds it open, so a click to close lets it go. */
 .collection-item:hover .interactive-item[aria-expanded],
 .collection-item .interactive-item[aria-expanded]:focus-visible {
     max-width: 3rem;
@@ -269,10 +262,16 @@ h1 {
     cursor: pointer;
 }
 
-/* The arrow reports the state rather than the hover: it turns as the content opens and
-   holds there until it closes again. The script keeps aria-expanded in step. */
+.interactive-item[aria-expanded] .collection-icon svg:hover {
+    transform: rotate(90deg);
+}
+
 .interactive-item[aria-expanded="true"] .collection-icon svg {
     transform: rotate(90deg);
+}
+
+.interactive-item[aria-expanded="true"] .collection-icon svg:hover {
+    transform: rotate(0deg);
 }
 
 .collection-content {
@@ -297,7 +296,6 @@ h1 {
     max-width: 20rem;
     height: auto;
     display: block;
-    border-radius: 8px;
 }
 
 .collection-caption {
@@ -464,6 +462,10 @@ main {
     gap: 12px;
 }
 
+.gallery-grid:has(> .preview-item) {
+    gap: 2rem;
+}
+
 .gallery-item {
     position: relative;
     display: flex;
@@ -487,7 +489,6 @@ main {
     transition: transform .5s cubic-bezier(.34, 1.56, .64, 1);
 }
 
-
 .gallery-item img:hover {
     transform: scale(1.15);
 }
@@ -502,7 +503,53 @@ main {
     right: 1rem;
 }
 
+.preview-item {
+    height: fit-content;
+    position: relative;
+    overflow: hidden;
+    border: solid 1px var(--color-black);
+}
+
+.preview-item video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    filter: grayscale(1);
+    cursor: pointer;
+}
+
+.preview-item h3 {
+    display: none;
+}
+
+.preview-item .interactive-item {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+.preview-item-wrapper {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.preview-item-header .text-style-label {
+    margin-bottom: 1rem;
+}
+
+.preview-item-description {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .footer {
+    position: sticky;
+    bottom: 0;
     background: var(--color-black);
     color: var(--color-white);
 }
