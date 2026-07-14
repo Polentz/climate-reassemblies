@@ -14,6 +14,7 @@
 
 html {
     font-size: 100%;
+    scroll-behavior: smooth;
 }
 
 html,
@@ -304,14 +305,33 @@ h1 {
     text-align: center;
 }
 
-main {
+/* The runway the deck is pinned against. --scroll-length is however far the current
+   card's content still has to travel, so the page has exactly enough scroll to pull that
+   content through and not a pixel more. Script sets it; it is 0 for a card that fits. */
+.deck {
     position: relative;
+    height: calc(var(--doc-height) + var(--scroll-length, 0px));
+    /* Rides over the footer, which is parked at the bottom of the viewport underneath. */
+    z-index: 1;
+}
+
+/* Sticky, not fixed: the deck holds it against the top of the viewport for the length of
+   the runway and then simply lets go, and the footer below carries on up in the same
+   gesture. A fixed deck would have to be un-fixed by hand at exactly the right pixel.
+   The black is what hides the parked footer — a transparent deck would let it show
+   through the strip beside the cards from the moment the page loads. */
+.main {
+    position: sticky;
+    top: 0;
     height: var(--doc-height);
     width: 100%;
     display: block;
     overflow: hidden;
+    background: var(--color-black);
 }
 
+/* The cards no longer scroll — the window does, and the script translates the content
+   inside the current card to match. So the card just clips whatever is hanging out of it. */
 .section {
     position: absolute;
     height: var(--doc-height);
@@ -323,15 +343,10 @@ main {
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
     will-change: transform;
-    overflow-y: auto;
-    scrollbar-width: none;
+    overflow: hidden;
     transition:
         background .3s ease,
         color .3s ease;
-}
-
-.section::-webkit-scrollbar {
-    display: none;
 }
 
 .section:not(.current):hover .section-nav-tab {
@@ -360,10 +375,15 @@ main {
     transform: translateX(-15rem);
 }
 
+/* The tab has to outrank .section-layout-wrapper, which is transformed to scroll the card's
+   content and so paints in the positioned layer alongside this. Without a z-index the two
+   are tied and DOM order wins, putting the content over the tab strip — where it silently
+   eats the clicks that switch cards. */
 .section-nav-wrapper {
     position: sticky;
     left: 0;
     top: 0;
+    z-index: 1;
 }
 
 .section-nav-tab {
@@ -399,8 +419,11 @@ main {
     opacity: 1;
 }
 
+/* This is the part the window's scroll actually moves. The tab beside it is a sibling, so
+   it stays where it is while the content slides up past it. */
 .section-layout-wrapper {
     padding: 8rem;
+    will-change: transform;
 }
 
 .section-header {
@@ -502,7 +525,14 @@ main {
     right: 1rem;
 }
 
+/* Parked against the bottom of the viewport from the moment the page loads, sitting behind
+   the deck. It never moves — the deck slides up off it and uncovers it, so the footer reads
+   as something the page was resting on rather than something that scrolled in after it.
+   At the very bottom of the page the sticky offset runs out exactly as the footer reaches
+   its own place in the flow, so it settles without a jump. */
 .footer {
+    position: sticky;
+    bottom: 0;
     background: var(--color-black);
     color: var(--color-white);
 }

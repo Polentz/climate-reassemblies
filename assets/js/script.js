@@ -41,11 +41,81 @@ const handleSections = () => {
         });
     };
 
+    // Nothing on the page is its own scroller any more: the window is, and the current card
+    // is pinned in front of it. Scrolling the window drags that card's content up through
+    // it, and the moment the content runs out the deck unpins and the very same gesture
+    // keeps going into the footer. One scroller means the browser never has to hand a
+    // scroll from one box to another — which is what made the footer feel like a second,
+    // separate movement.
+    const root = document.documentElement;
+    const currentSection = () => document.querySelector(".section.current") || sections[0];
+    const wrapperOf = (section) => section.querySelector(".section-layout-wrapper");
+
+    // How far the current card's content has to travel. That distance, handed to the CSS,
+    // is exactly the extra height the deck gets — so the page runs out of scroll at the
+    // same instant the content does, and there is never a stretch of scrolling that does
+    // nothing. A card that already fits gets 0 and the footer sits right below it.
+    let travel = 0;
+    const measureScroll = () => {
+        const section = currentSection();
+        travel = Math.max(0, wrapperOf(section).offsetHeight - section.clientHeight);
+        root.style.setProperty("--scroll-length", `${travel}px`);
+    };
+
+    const applyScroll = () => {
+        const section = currentSection();
+        const offset = Math.min(window.scrollY, travel);
+        gsap.set(wrapperOf(section), { y: -offset });
+
+        // The tab fades back in once the header has gone past the top of the card. The
+        // card has no scrollTop to read now, so the offset we just applied stands in for it.
+        const header = section.querySelector(".section-header");
+        if (!header) return;
+        const headerBottom = header.offsetTop + header.offsetHeight - 100;
+        section.classList.toggle("scrolled", offset >= headerBottom);
+    };
+
+    // Switching cards hands the page's scroll to a different piece of content, so the old
+    // card's content is put back where it started and the runway is re-cut for the new one.
+    const resetScroll = () => {
+        sections.forEach((section) => {
+            if (section === currentSection()) return;
+            gsap.set(wrapperOf(section), { y: 0 });
+            section.classList.remove("scrolled");
+        });
+        measureScroll();
+        applyScroll();
+    };
+
+    let scrolling = false;
+    window.addEventListener("scroll", () => {
+        if (scrolling) return;
+        scrolling = true;
+        requestAnimationFrame(() => {
+            scrolling = false;
+            applyScroll();
+        });
+    }, { passive: true });
+
+    // The card's content changes height under us — collection items open and close, images
+    // arrive late, cards get collected and removed. Each of those changes how much runway
+    // the page needs, so the deck is re-cut whenever it happens rather than only on resize.
+    const observer = new ResizeObserver(() => {
+        measureScroll();
+        applyScroll();
+    });
+    sections.forEach((section) => observer.observe(wrapperOf(section)));
+
     const activate = (section) => {
         if (section.classList.contains("current")) return;
 
         sections.forEach((s) => s.classList.toggle("current", s === section));
-        // section.scrollTop = 0;
+
+        // A new card starts at its top, and the page's scroll is that card's scroll now —
+        // so the window goes back to 0 with it. Jumped, not smoothed: the card is already
+        // playing an entrance animation, and a scroll tween underneath it would fight that.
+        window.scrollTo({ top: 0, behavior: "auto" });
+        resetScroll();
 
         if (reduced) {
             layout(section, false);
@@ -65,41 +135,22 @@ const handleSections = () => {
                 0.15);
     };
 
-    // Each card is its own scroll container. Once a card's header has scrolled past
-    // its top edge, the card wears `.scrolled` and the CSS fades its tab back in.
-    sections.forEach((section) => {
-        const header = section.querySelector(".section-header");
-        if (!header) return;
-
-        let ticking = false;
-        const update = () => {
-            ticking = false;
-            // offsetTop is measured against .section itself, which is the offset parent.
-            const headerBottom = header.offsetTop + header.offsetHeight - 100;
-            section.classList.toggle("scrolled", section.scrollTop >= headerBottom);
-        };
-
-        section.addEventListener("scroll", () => {
-            if (ticking) return;
-            ticking = true;
-            requestAnimationFrame(update);
-        }, { passive: true });
-
-        update();
-    });
-
     measure();
     layout(sections.find((s) => s.classList.contains("current")) || sections[0], false);
+    resetScroll();
 
     document.querySelector(".main").addEventListener("click", (e) => {
         const wrapper = e.target.closest(".section-nav-wrapper");
         if (wrapper) activate(wrapper.closest(".section"));
     });
 
-    // Slot width is in rem, so it only changes if the root font size does.
+    // Slot width is in rem, so it only changes if the root font size does. The runway is a
+    // different matter: a narrower window reflows the copy taller, so it is re-cut here too.
     window.addEventListener("resize", () => {
         measure();
-        layout(document.querySelector(".section.current") || sections[0], false);
+        layout(currentSection(), false);
+        measureScroll();
+        applyScroll();
     });
 };
 
