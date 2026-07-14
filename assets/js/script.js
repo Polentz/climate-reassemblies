@@ -227,22 +227,44 @@ const handleCollection = async () => {
         enableToggle(item);
     };
 
-    // An image item shows a thumbnail of the source image — same file, sized down by CSS.
-    // Its header opens the thumbnail out to the full width of the card.
-    const fillImage = (source, content, item, page) => {
-        const image = source.querySelector("img");
-        if (!image) return;
-
+    // A media item shows a thumbnail of the source image or video — the same file, sized
+    // down by CSS. Its header opens the thumbnail out to the full width of the card. The
+    // thumbnail is a plain looping video, not the player: a card is something you look at
+    // and reorder, and a second set of controls in it would just fight the drag.
+    const fillMedia = (source, media, content, item, page) => {
         enableToggle(item);
 
-        const thumbnail = document.createElement("img");
+        const video = media.tagName === "VIDEO";
+        const thumbnail = document.createElement(video ? "video" : "img");
         thumbnail.className = "collection-thumbnail";
         // The source's src is written relative to the page it sits on, which is not
         // necessarily the page doing the rendering, so it is resolved against its own.
-        thumbnail.src = new URL(image.getAttribute("src"), new URL(page, location.href)).href;
-        thumbnail.alt = image.getAttribute("alt") || "";
-        thumbnail.loading = "lazy";
-        // Images drag themselves by default, which would hijack the card's own drag.
+        thumbnail.src = new URL(media.getAttribute("src"), new URL(page, location.href)).href;
+
+        if (video) {
+            // Muted is what buys the autoplay: a browser will refuse to start a video that
+            // could make noise. Set as attributes as well as properties, since Safari reads
+            // muted and playsinline off the markup when it decides whether to allow it.
+            ["autoplay", "muted", "loop", "playsinline", "disablepictureinpicture"]
+                .forEach((attribute) => thumbnail.setAttribute(attribute, ""));
+            thumbnail.muted = true;
+
+            // A silent clip says little about itself, so the video keeps the heading it
+            // was filed under. It stands above the thumbnail and stays there, expanded or
+            // not — unlike the caption, which only comes out with the enlarged media.
+            const heading = source.querySelector("h3")?.textContent.trim();
+            if (heading) {
+                const title = document.createElement("h3");
+                title.className = "collection-title text-style-h3";
+                title.textContent = heading;
+                content.append(title);
+            }
+        } else {
+            thumbnail.alt = media.getAttribute("alt") || "";
+            thumbnail.loading = "lazy";
+        }
+
+        // Media drags itself by default, which would hijack the card's own drag.
         thumbnail.draggable = false;
         content.append(thumbnail);
 
@@ -272,8 +294,9 @@ const handleCollection = async () => {
         item.querySelector("[data-label='type']").textContent = type;
 
         const content = item.querySelector(".collection-content");
-        if (source.querySelector("img")) {
-            fillImage(source, content, item, page);
+        const media = source.querySelector("img, video");
+        if (media) {
+            fillMedia(source, media, content, item, page);
         } else {
             fillText(source, content, item);
         }
