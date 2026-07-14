@@ -103,8 +103,29 @@ const handleSections = () => {
     });
 };
 
-const handleExcerpts = () => {
+const handleCollection = () => {
     const EXCERPT_LENGTH = 500;
+    const STORAGE_KEY = "climate-reassemblies.collection";
+
+    // Only the source ids are stored — every item is rebuilt from the page on load,
+    // so edits to the copy show up in a collection saved before the edit.
+    const readStore = () => {
+        try {
+            const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            return Array.isArray(stored) ? stored : [];
+        } catch {
+            return [];
+        }
+    };
+
+    const writeStore = (ids) => {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+        } catch {
+            // Private browsing and full quotas both throw here. The collection still
+            // works for this visit; it just won't come back after a refresh.
+        }
+    };
 
     const excerpt = (text, limit = EXCERPT_LENGTH) => {
         const clean = text.replace(/\s+/g, " ").trim();
@@ -115,27 +136,104 @@ const handleExcerpts = () => {
     };
 
     const container = document.querySelector("#collection-container");
-    if (!container) return;
+    const template = document.querySelector("#collection-item-template");
+    if (!container || !template) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    container.querySelectorAll(".collection-content").forEach((content) => {
-        const full = content.innerHTML;
-        const short = `<p>${excerpt(content.textContent)}</p>`;
+    const plainText = (el) => el.textContent.replace(/\s+/g, " ").trim();
 
-        // Nothing to reveal if the copy already fits inside the excerpt.
-        const item = content.closest(".collection-item");
-        const toggle = item.querySelector(".interactive-item");
-        if (short === full || !toggle) return;
+    // A collected text item shows a 500-character excerpt and stashes both versions,
+    // so clicking its header can swap between them. Copy that already fits gets no toggle.
+    const fillText = (source, content, item) => {
+        const blocks = [...source.querySelectorAll("h3, p, blockquote")]
+            .filter((el) => !el.closest(".interactive-item"))
+            // A quotation's attribution is a <p> nested in the blockquote. The blockquote
+            // brings it along, so picking it up on its own would print it twice.
+            .filter((el) => el.tagName === "BLOCKQUOTE" || !el.closest("blockquote"))
+            .filter((el) => plainText(el));
 
+        // Quotes keep their own markup so they still read as quotes in the collection;
+        // everything else is flattened to a paragraph.
+        const full = blocks
+            .map((el) => (el.tagName === "BLOCKQUOTE" ? el.outerHTML : `<p>${plainText(el)}</p>`))
+            .join("");
+
+        const text = blocks.map(plainText).join(" ");
+        if (text.length <= EXCERPT_LENGTH) {
+            content.innerHTML = full;
+            return;
+        }
+
+        const short = `<p>${excerpt(text)}</p>`;
+        content.innerHTML = short;
         content.dataset.full = full;
         content.dataset.excerpt = short;
-        content.innerHTML = short;
 
+        const toggle = item.querySelector(".interactive-item");
         toggle.setAttribute("role", "button");
         toggle.setAttribute("tabindex", "0");
         toggle.setAttribute("aria-expanded", "false");
-    });
+    };
+
+    // An image item shows a thumbnail of the source image — same file, sized down by CSS.
+    const fillImage = (source, content) => {
+        const image = source.querySelector("img");
+        if (!image) return;
+
+        const caption = source.querySelector("figcaption")?.textContent.trim();
+
+        const thumbnail = document.createElement("img");
+        thumbnail.className = "collection-thumbnail";
+        thumbnail.src = image.getAttribute("src");
+        thumbnail.alt = image.getAttribute("alt") || caption || "";
+        thumbnail.loading = "lazy";
+        content.append(thumbnail);
+
+        if (!caption) return;
+        const figcaption = document.createElement("p");
+        figcaption.className = "text-style-caption";
+        figcaption.textContent = caption;
+        content.append(figcaption);
+    };
+
+    const collect = (source) => {
+        const item = template.content.firstElementChild.cloneNode(true);
+        const { type = "Text", category = "" } = source.dataset;
+
+        item.dataset.type = type;
+        item.querySelector("[data-label='category']").textContent = category;
+        // item.querySelector("[data-label='type']").textContent = type;
+
+        const content = item.querySelector(".collection-content");
+        if (type === "Image") {
+            fillImage(source, content);
+        } else {
+            fillText(source, content, item);
+        }
+
+        container.append(item);
+        return item;
+    };
+
+    const revealItem = (item) => {
+        if (reduced) return;
+
+        // Unroll the card from nothing, then let its contents settle in behind it.
+        gsap.timeline({ onComplete: () => gsap.set(item, { clearProps: "all" }) })
+            .from(item, {
+                height: 0,
+                paddingTop: 0,
+                paddingBottom: 0,
+                opacity: 0,
+                overflow: "hidden",
+                duration: 0.55,
+                ease: "power3.out",
+            })
+            .from(item.children,
+                { opacity: 0, y: 16, duration: 0.4, stagger: 0.1, ease: "power2.out" },
+                "-=0.2");
+    };
 
     const toggleExcerpt = (item) => {
         const content = item.querySelector(".collection-content");
@@ -175,6 +273,45 @@ const handleExcerpts = () => {
         e.preventDefault(); // Space would otherwise scroll the card.
         toggleExcerpt(toggle.closest(".collection-item"));
     });
+
+    const markCollected = (source) => {
+        source.dataset.collected = "true";
+        const button = source.querySelector("[data-action='add-to-slide']");
+        if (button) button.textContent = "Collected";
+    };
+
+    // Rebuild the saved collection, dropping any id whose source is no longer on the
+    // page, then write the surviving ids back so the stale ones don't linger in storage.
+    const restore = () => {
+        const restored = readStore().filter((id) => {
+            const source = document.querySelector(`[data-id="${CSS.escape(id)}"]`);
+            if (!source || source.dataset.collected === "true") return false;
+            markCollected(source);
+            collect(source);
+            return true;
+        });
+        writeStore(restored);
+        return restored;
+    };
+
+    const collected = restore();
+
+    // Collecting is delegated from the page, so any source added later works for free.
+    // The asterisk and the "Collect" button are the same gesture — either one collects.
+    document.querySelector(".main").addEventListener("click", (e) => {
+        const trigger = e.target.closest(".interactive-icon, [data-action='add-to-slide']");
+        if (!trigger || container.contains(trigger)) return;
+
+        // The asterisk in the intro copy is decorative: it sits in no source, so it collects nothing.
+        const source = trigger.closest("[data-id]");
+        if (!source || source.dataset.collected === "true") return;
+
+        markCollected(source);
+        revealItem(collect(source));
+
+        collected.push(source.dataset.id);
+        writeStore(collected);
+    });
 };
 
 const backgroundParallax = () => {
@@ -213,7 +350,7 @@ window.addEventListener("load", () => {
     history.scrollRestoration = "manual";
     documentHeight();
     handleSections();
-    handleExcerpts();
+    handleCollection();
 });
 
 window.addEventListener("resize", () => {

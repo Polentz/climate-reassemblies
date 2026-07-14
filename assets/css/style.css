@@ -166,7 +166,6 @@ h1 {
 
 .collection-icon {
     padding: 0 1rem;
-    cursor: pointer;
 }
 
 .collection-icon svg {
@@ -174,7 +173,13 @@ h1 {
     transition: transform .5s cubic-bezier(.22, 1, .36, 1);
 }
 
-.interactive-item:hover .collection-icon svg {
+/* The script sets aria-expanded on the header only when the item is holding copy
+   back, so the arrow invites a click on those items and stays inert on the rest. */
+.interactive-item[aria-expanded] .collection-icon {
+    cursor: pointer;
+}
+
+.interactive-item[aria-expanded]:hover .collection-icon svg {
     transform: rotate(90deg);
 }
 
@@ -190,6 +195,20 @@ h1 {
     flex-direction: column;
     gap: 2rem;
     overflow: hidden;
+}
+
+.collection-content .text-style-quote {
+    font-family: "Apercu Medium", Helvetica, Arial, sans-serif;
+    font-size: 2rem;
+    line-height: 1.2;
+}
+
+.collection-thumbnail {
+    width: 100%;
+    max-width: 20rem;
+    height: auto;
+    display: block;
+    border-radius: 8px;
 }
 
 main {
