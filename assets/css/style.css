@@ -148,6 +148,11 @@ h1 {
     transform: rotate(360deg);
 }
 
+#collection-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
 .collection-item {
     position: relative;
     background: var(--color-white);
@@ -189,6 +194,12 @@ h1 {
     transform: rotate(90deg);
 }
 
+.collection-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
 .collection-item:hover {
     transform: translateY(-4px);
 }
@@ -208,11 +219,8 @@ h1 {
 }
 
 .collection-item .interactive-item {
-    margin-bottom: 1rem;
-}
-
-.collection-icon {
-    padding: 0 1rem;
+    width: auto;
+    align-self: unset;
 }
 
 .collection-icon svg {

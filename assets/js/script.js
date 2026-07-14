@@ -166,7 +166,7 @@ const handleCollection = () => {
         // Quotes keep their own markup so they still read as quotes in the collection;
         // everything else is flattened to a paragraph.
         const full = blocks
-            .map((el) => (el.tagName === "BLOCKQUOTE" ? el.outerHTML : `<p>${plainText(el)}</p>`))
+            .map((el) => (el.tagName === "BLOCKQUOTE" ? el.outerHTML : el.outerHTML))
             .join("");
 
         const text = blocks.map(plainText).join(" ");
@@ -179,7 +179,6 @@ const handleCollection = () => {
         content.innerHTML = short;
         content.dataset.full = full;
         content.dataset.excerpt = short;
-        content.classList.add("text-style-p");
 
         enableToggle(item);
     };
@@ -223,8 +222,6 @@ const handleCollection = () => {
         item.querySelector("[data-label='category']").textContent = category;
         item.querySelector("[data-label='type']").textContent = type;
 
-        // data-type names the section the source came from, so the medium is read off
-        // the markup instead: carry an image and you get a thumbnail, otherwise text.
         const content = item.querySelector(".collection-content");
         if (source.querySelector("img")) {
             fillImage(source, content, item);
@@ -250,8 +247,8 @@ const handleCollection = () => {
                 duration: 0.55,
                 ease: "power3.out",
             })
-            .from(item.children,
-                { opacity: 0, y: 16, duration: 0.4, stagger: 0.1, ease: "power2.out" },
+            .from(item.querySelectorAll(".interactive-item, .collection-content"),
+                { opacity: 0, y: 16, duration: 0.4, stagger: 0.1, ease: "power2.out", clearProps: "all" },
                 "-=0.2");
     };
 
@@ -346,7 +343,7 @@ const handleCollection = () => {
 
     const markCollected = (source) => {
         source.dataset.collected = "true";
-        const button = source.querySelector("[data-action='add-to-slide']");
+        const button = source.querySelector("[data-action='add-to-collection']");
         if (button) button.textContent = "Collected";
     };
 
@@ -356,7 +353,7 @@ const handleCollection = () => {
         if (!source) return;
 
         delete source.dataset.collected;
-        const button = source.querySelector("[data-action='add-to-slide']");
+        const button = source.querySelector("[data-action='add-to-collection']");
         if (button) button.textContent = "Collect";
     };
 
@@ -500,7 +497,7 @@ const handleCollection = () => {
     // Collecting is delegated from the page, so any source added later works for free.
     // The asterisk and the "Collect" button are the same gesture — either one collects.
     document.querySelector(".main").addEventListener("click", (e) => {
-        const trigger = e.target.closest(".interactive-icon, [data-action='add-to-slide']");
+        const trigger = e.target.closest(".interactive-icon, [data-action='add-to-collection']");
         if (!trigger || container.contains(trigger)) return;
 
         // The asterisk in the intro copy is decorative: it sits in no source, so it collects nothing.

@@ -72,7 +72,8 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <p class="button interactive-button text-style-label" data-action="add-to-slide">
+                                    <p class="button interactive-button text-style-label"
+                                        data-action="add-to-collection">
                                         Collect
                                     </p>
                                 </div>
@@ -111,7 +112,8 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <p class="button interactive-button text-style-label" data-action="add-to-slide">
+                                    <p class="button interactive-button text-style-label"
+                                        data-action="add-to-collection">
                                         Collect
                                     </p>
                                 </div>
@@ -146,7 +148,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -203,7 +205,7 @@
                                             fill="#000000"></path>
                                     </svg>
                                 </span>
-                                <p class="button interactive-button text-style-label" data-action="add-to-slide">
+                                <p class="button interactive-button text-style-label" data-action="add-to-collection">
                                     Collect
                                 </p>
                             </div>
@@ -237,7 +239,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -270,7 +272,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -295,7 +297,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -317,7 +319,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -339,7 +341,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -361,7 +363,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -433,7 +435,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -466,7 +468,7 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <span class="button interactive-button" data-action="add-to-slide">
+                                    <span class="button interactive-button" data-action="add-to-collection">
                                         Collect
                                     </span>
                                 </div>
@@ -487,7 +489,8 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <p class="button interactive-button text-style-label" data-action="add-to-slide">
+                                    <p class="button interactive-button text-style-label"
+                                        data-action="add-to-collection">
                                         Collect
                                     </p>
                                 </div>
@@ -526,7 +529,8 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <p class="button interactive-button text-style-label" data-action="add-to-slide">
+                                    <p class="button interactive-button text-style-label"
+                                        data-action="add-to-collection">
                                         Collect
                                     </p>
                                 </div>
@@ -559,7 +563,8 @@
                                                 fill="#000000"></path>
                                         </svg>
                                     </span>
-                                    <p class="button interactive-button text-style-label" data-action="add-to-slide">
+                                    <p class="button interactive-button text-style-label"
+                                        data-action="add-to-collection">
                                         Collect
                                     </p>
                                 </div>
@@ -597,13 +602,8 @@
                         </div>
                         <div class="flex-column">
                             <ul id="collection-container" class="flex-column-item"></ul>
-
-                            <!-- Cloned once per collected item; script.js fills the labels
-                                 and the content, which is text or a thumbnail by data-type. -->
                             <template id="collection-item-template">
                                 <li class="collection-item" draggable="true">
-                                    <!-- Two tapered strokes, thick at the crossing and pointed at the
-                                         tips, so the X is drawn in the same hand as the asterisk. -->
                                     <button class="collection-remove" type="button" data-action="remove"
                                         aria-label="Remove from collection">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
