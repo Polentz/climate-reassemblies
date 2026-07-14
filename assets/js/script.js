@@ -350,6 +350,16 @@ const handleCollection = () => {
         if (button) button.textContent = "Collected";
     };
 
+    // Hand the source back: its asterisk can collect it again.
+    const releaseSource = (id) => {
+        const source = document.querySelector(`[data-id="${CSS.escape(id)}"]:not(.collection-item)`);
+        if (!source) return;
+
+        delete source.dataset.collected;
+        const button = source.querySelector("[data-action='add-to-slide']");
+        if (button) button.textContent = "Collect";
+    };
+
     // Rebuild the saved collection, dropping any id whose source is no longer on the
     // page, then write the surviving ids back so the stale ones don't linger in storage.
     const restore = () => {
@@ -373,6 +383,41 @@ const handleCollection = () => {
         collected.push(...[...container.children].map((item) => item.dataset.id));
         writeStore(collected);
     };
+
+    // Roll the card up and take it out of the list. Because it collapses in the flow, the
+    // cards below it close the gap as it goes rather than jumping once it's gone.
+    const removeItem = (item) => {
+        const done = () => {
+            // The card is flat by now, but the list's 2rem gap still sits where it was.
+            // Taking it out through slideIntoPlace lets the cards below close that too.
+            slideIntoPlace(() => item.remove());
+            releaseSource(item.dataset.id);
+            saveOrder();
+        };
+
+        if (reduced) {
+            done();
+            return;
+        }
+
+        gsap.to(item, {
+            height: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            marginBottom: 0,
+            opacity: 0,
+            overflow: "hidden",
+            duration: 0.45,
+            ease: "power3.inOut",
+            overwrite: true,
+            onComplete: done,
+        });
+    };
+
+    container.addEventListener("click", (e) => {
+        const remove = e.target.closest("[data-action='remove']");
+        if (remove) removeItem(remove.closest(".collection-item"));
+    });
 
     // Reorder by dragging. The card follows the cursor as the browser's drag image; what
     // moves in the DOM is the real card, slotting in wherever the cursor currently is.
@@ -398,7 +443,8 @@ const handleCollection = () => {
 
         cards.forEach((card) => {
             // The dragged card is already under the cursor; animating it would fight that.
-            if (card === dragged) return;
+            // A card the move took out of the list has nowhere to slide to.
+            if (card === dragged || !card.isConnected) return;
 
             const delta = before.get(card) - card.getBoundingClientRect().top;
             if (!delta) return;
