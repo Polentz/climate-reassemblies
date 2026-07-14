@@ -148,6 +148,10 @@ h1 {
     transform: rotate(360deg);
 }
 
+#collection {
+    margin-top: 4rem;
+}
+
 #collection-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -218,9 +222,43 @@ h1 {
     transform: none;
 }
 
+.collection-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* At rest the arrow takes up no room at all: it is clamped to zero width and clipped,
+   which is as good as display:none but, unlike display, can be animated. The negative
+   margin swallows the header's gap, so a collapsed arrow leaves nothing behind — and it
+   unwinds on hover, which is what pushes the labels aside as the arrow arrives.
+   Only a card with something to open ever gets there. */
 .collection-item .interactive-item {
     width: auto;
     align-self: unset;
+    max-width: 0;
+    margin-right: -1rem;
+    overflow: hidden;
+    opacity: 0;
+    filter: blur(3px);
+    pointer-events: none;
+    transition:
+        max-width .5s cubic-bezier(.22, 1, .36, 1),
+        margin-right .5s cubic-bezier(.22, 1, .36, 1),
+        opacity .3s ease,
+        filter .3s ease;
+}
+
+/* :focus-visible, not :focus-within — a mouse click focuses the arrow, and :focus-within
+   would then keep it on screen after the pointer has left. This way only keyboard focus
+   holds it open, so a click to close lets it go. */
+.collection-item:hover .interactive-item[aria-expanded],
+.collection-item .interactive-item[aria-expanded]:focus-visible {
+    max-width: 3rem;
+    margin-right: 0;
+    opacity: 1;
+    filter: none;
+    pointer-events: auto;
 }
 
 .collection-icon svg {
@@ -232,7 +270,9 @@ h1 {
     cursor: pointer;
 }
 
-.interactive-item[aria-expanded]:hover .collection-icon svg {
+/* The arrow reports the state rather than the hover: it turns as the content opens and
+   holds there until it closes again. The script keeps aria-expanded in step. */
+.interactive-item[aria-expanded="true"] .collection-icon svg {
     transform: rotate(90deg);
 }
 

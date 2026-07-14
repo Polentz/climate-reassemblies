@@ -600,7 +600,7 @@
                                 <h3 class="text-style-h3">Return here anytime to review, explore, and reassemble.</h3>
                             </div>
                         </div>
-                        <div class="flex-column">
+                        <div id="collection" class="flex-column">
                             <ul id="collection-container" class="flex-column-item"></ul>
                             <template id="collection-item-template">
                                 <li class="collection-item" draggable="true">
@@ -611,18 +611,22 @@
                                                 d="M20.9,18.2c1.7,1.7,1.1,2.7.6,3.2-.3.3-.7.5-1.2.5-.6,0-1.3-.4-2.1-1.1-.5-.5-5.2-6.2-7.2-8.8h0c-2.1,2.6-6.7,8.3-7.2,8.8-.7.7-1.4,1.1-2.1,1.1s-.8-.2-1.2-.5C0,21-.1,20.3.1,19.6c.2-.4.5-.9,1-1.4.5-.5,6.2-5.2,8.8-7.2h0C7.3,8.9,1.6,4.3,1.1,3.7c-.5-.5-.8-.9-1-1.4C-.1,1.7,0,1,.5.5,1.3-.3,2.5-.1,3.7,1.1c.5.5,5.2,6.2,7.2,8.8h0c2.1-2.6,6.7-8.3,7.2-8.8,1.2-1.2,2.4-1.4,3.2-.6s1.1,1.6-.6,3.2c-.5.5-6.2,5.2-8.8,7.2h0c2.6,2,8.3,6.7,8.8,7.2Z" />
                                         </svg>
                                     </button>
-                                    <div class="interactive-item">
-                                        <span class="collection-icon">
-                                            <svg viewBox="0 0 27 22" xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                <clipPath>
-                                                    <path d="m0 0h26.13v21.46h-26.13z"></path>
-                                                </clipPath>
-                                                <path
-                                                    d="m17.86 19.54c1.46-1.9 4.82-6.27 8.26-8.8-3.61-2.47-6.88-6.91999-8.3-8.83999-.33-.44-.58-.79-.67-.88-1.11-1.1100017-2.16-1.320008-2.89-.600008-.2088.201021-.3507.461527-.4061.746038-.0555.28452-.0219.57921.0961.84397.2033.49252.5142.93329.91 1.29.38.38 3.22 2.67 8 6.46l.53.41999h-.68c-4.48.15-13.56-.56999-17.92-.91999-1.26-.1-2.17-.17-2.34-.17-1.610003 0-2.45.55999-2.45 1.61999s.839997 1.61 2.45 1.61c.2 0 1.44-.08 3.17-.2 4.62-.31 13.23-.89 17.08-.89h.72l-.56.45c-1.74 1.37-7.44 5.89-8 6.45-.3935.3649-.7068.8076-.92 1.3-.1131.2648-.1431.5576-.086.8398.0572.2822.1988.5403.406.7402.73.73 1.76.53 2.88-.59.1-.07.37-.43.72-.88z"
-                                                    fill="#000000"></path>
-                                            </svg>
-                                        </span>
+                                    <!-- The labels always show; the arrow beside them is the toggle, and it
+                                         only surfaces on hover, and only on a card that can open. -->
+                                    <div class="collection-header">
+                                        <div class="interactive-item">
+                                            <span class="collection-icon">
+                                                <svg viewBox="0 0 27 22" xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <clipPath>
+                                                        <path d="m0 0h26.13v21.46h-26.13z"></path>
+                                                    </clipPath>
+                                                    <path
+                                                        d="m17.86 19.54c1.46-1.9 4.82-6.27 8.26-8.8-3.61-2.47-6.88-6.91999-8.3-8.83999-.33-.44-.58-.79-.67-.88-1.11-1.1100017-2.16-1.320008-2.89-.600008-.2088.201021-.3507.461527-.4061.746038-.0555.28452-.0219.57921.0961.84397.2033.49252.5142.93329.91 1.29.38.38 3.22 2.67 8 6.46l.53.41999h-.68c-4.48.15-13.56-.56999-17.92-.91999-1.26-.1-2.17-.17-2.34-.17-1.610003 0-2.45.55999-2.45 1.61999s.839997 1.61 2.45 1.61c.2 0 1.44-.08 3.17-.2 4.62-.31 13.23-.89 17.08-.89h.72l-.56.45c-1.74 1.37-7.44 5.89-8 6.45-.3935.3649-.7068.8076-.92 1.3-.1131.2648-.1431.5576-.086.8398.0572.2822.1988.5403.406.7402.73.73 1.76.53 2.88-.59.1-.07.37-.43.72-.88z"
+                                                        fill="#000000"></path>
+                                                </svg>
+                                            </span>
+                                        </div>
                                         <span class="text-style-label" data-label="category"></span>
                                         <span class="text-style-icon">
                                             <svg fill="none" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
@@ -634,6 +638,7 @@
                                         <span class="text-style-label" data-label="type"></span>
                                     </div>
                                     <div class="collection-content"></div>
+
                                 </li>
                             </template>
                         </div>

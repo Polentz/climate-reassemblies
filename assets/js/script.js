@@ -45,7 +45,7 @@ const handleSections = () => {
         if (section.classList.contains("current")) return;
 
         sections.forEach((s) => s.classList.toggle("current", s === section));
-        section.scrollTop = 0;
+        // section.scrollTop = 0;
 
         if (reduced) {
             layout(section, false);
@@ -166,7 +166,7 @@ const handleCollection = () => {
         // Quotes keep their own markup so they still read as quotes in the collection;
         // everything else is flattened to a paragraph.
         const full = blocks
-            .map((el) => (el.tagName === "BLOCKQUOTE" ? el.outerHTML : el.outerHTML))
+            .map((el) => (el.tagName === "BLOCKQUOTE" ? el.outerHTML : `<p class="text-style-p">${plainText(el)}</p>`))
             .join("");
 
         const text = blocks.map(plainText).join(" ");
@@ -175,7 +175,7 @@ const handleCollection = () => {
             return;
         }
 
-        const short = `<p>${excerpt(text)}</p>`;
+        const short = `<p class="text-style-p">${excerpt(text)}</p>`;
         content.innerHTML = short;
         content.dataset.full = full;
         content.dataset.excerpt = short;
@@ -247,7 +247,11 @@ const handleCollection = () => {
                 duration: 0.55,
                 ease: "power3.out",
             })
-            .from(item.querySelectorAll(".interactive-item, .collection-content"),
+            // Only what is on show at rest gets tweened. Anything waiting on a hover — the
+            // remove button, the arrow — rests at opacity 0, and a `from` tween would end by
+            // pinning that 0 into the inline style, where it outranks the hover rule and the
+            // thing could never appear at all.
+            .from(item.querySelectorAll(".collection-header, .collection-content"),
                 { opacity: 0, y: 16, duration: 0.4, stagger: 0.1, ease: "power2.out", clearProps: "all" },
                 "-=0.2");
     };
