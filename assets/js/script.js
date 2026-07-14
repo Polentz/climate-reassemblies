@@ -75,7 +75,7 @@ const handleSections = () => {
         const update = () => {
             ticking = false;
             // offsetTop is measured against .section itself, which is the offset parent.
-            const headerBottom = header.offsetTop + header.offsetHeight - 100;
+            const headerBottom = header.offsetTop + header.offsetHeight - 150;
             section.classList.toggle("scrolled", section.scrollTop >= headerBottom);
         };
 
@@ -520,6 +520,106 @@ const handleCollection = () => {
     });
 };
 
+const handleVideoPlayers = () => {
+    const players = [...document.querySelectorAll(".video-player")];
+    if (!players.length) return;
+
+    const clock = (seconds) => {
+        // Duration is NaN until the browser has read the file's metadata.
+        if (!Number.isFinite(seconds)) return "0:00";
+        const minutes = Math.floor(seconds / 60);
+        const rest = Math.floor(seconds % 60);
+        return `${minutes}:${String(rest).padStart(2, "0")}`;
+    };
+
+    players.forEach((player) => {
+        const video = player.querySelector("video");
+        const playButton = player.querySelector("[data-action='toggle-play']");
+        const muteButton = player.querySelector("[data-action='toggle-mute']");
+        const fullscreenButton = player.querySelector("[data-action='toggle-fullscreen']");
+        const scrub = player.querySelector(".video-scrub");
+        const time = player.querySelector(".video-time");
+        if (!video) return;
+
+        // While the thumb is being dragged it belongs to the user, so playback stops
+        // writing to it until they let go.
+        let scrubbing = false;
+
+        // The video autoplays muted, and a browser may still refuse that — so the buttons
+        // read their state off the video rather than assuming it.
+        const syncPlay = () => {
+            player.classList.toggle("is-playing", !video.paused);
+            playButton.setAttribute("aria-label", video.paused ? "Play" : "Pause");
+        };
+
+        const syncMute = () => {
+            player.classList.toggle("is-muted", video.muted);
+            muteButton.setAttribute("aria-label", video.muted ? "Unmute" : "Mute");
+        };
+
+        const syncTime = () => {
+            const played = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+            if (!scrubbing) scrub.value = played;
+            // The track is a gradient with its stop parked at the playhead.
+            player.style.setProperty("--video-progress", `${played}%`);
+            time.textContent = `${clock(video.currentTime)} / ${clock(video.duration)}`;
+        };
+
+        const syncFullscreen = () => {
+            const full = document.fullscreenElement === player;
+            player.classList.toggle("is-fullscreen", full);
+            fullscreenButton.setAttribute("aria-label", full ? "Exit full screen" : "Enter full screen");
+        };
+
+        const togglePlay = () => {
+            if (video.paused) video.play(); else video.pause();
+        };
+
+        const toggleFullscreen = () => {
+            if (document.fullscreenElement === player) {
+                document.exitFullscreen();
+            } else if (player.requestFullscreen) {
+                // A refusal (no permission, already exiting) is the browser's call to make,
+                // and the controls just stay as they are.
+                player.requestFullscreen().catch(() => { });
+            } else if (video.webkitEnterFullscreen) {
+                // iPhone Safari can only fullscreen the video itself, not its wrapper —
+                // so it gets the native player rather than this bar.
+                video.webkitEnterFullscreen();
+            }
+        };
+
+        playButton.addEventListener("click", togglePlay);
+        video.addEventListener("click", togglePlay);
+
+        muteButton.addEventListener("click", () => {
+            video.muted = !video.muted;
+        });
+
+        fullscreenButton.addEventListener("click", toggleFullscreen);
+        // Fires for Escape and the browser's own exit too, not just the button.
+        document.addEventListener("fullscreenchange", syncFullscreen);
+
+        scrub.addEventListener("pointerdown", () => { scrubbing = true; });
+        scrub.addEventListener("input", () => {
+            if (video.duration) video.currentTime = (scrub.value / 100) * video.duration;
+        });
+        // Dragging can end anywhere on the page, so the release is caught on the window.
+        window.addEventListener("pointerup", () => { scrubbing = false; });
+
+        video.addEventListener("play", syncPlay);
+        video.addEventListener("pause", syncPlay);
+        video.addEventListener("volumechange", syncMute);
+        video.addEventListener("timeupdate", syncTime);
+        video.addEventListener("loadedmetadata", syncTime);
+
+        syncPlay();
+        syncMute();
+        syncTime();
+        syncFullscreen();
+    });
+};
+
 const backgroundParallax = () => {
     // Respect users who prefer reduced motion — skip the effect entirely.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -557,6 +657,7 @@ window.addEventListener("load", () => {
     documentHeight();
     handleSections();
     handleCollection();
+    handleVideoPlayers();
 });
 
 window.addEventListener("resize", () => {
