@@ -75,7 +75,7 @@ const handleSections = () => {
         const update = () => {
             ticking = false;
             // offsetTop is measured against .section itself, which is the offset parent.
-            const headerBottom = header.offsetTop + header.offsetHeight;
+            const headerBottom = header.offsetTop + header.offsetHeight - 100;
             section.classList.toggle("scrolled", section.scrollTop >= headerBottom);
         };
 
@@ -349,6 +349,7 @@ const handleCollection = () => {
         source.dataset.collected = "true";
         const button = source.querySelector("[data-action='add-to-collection']");
         if (button) button.textContent = "Collected";
+        if (button) button.style.pointerEvents = "none";
     };
 
     // Hand the source back: its asterisk can collect it again.
@@ -359,6 +360,7 @@ const handleCollection = () => {
         delete source.dataset.collected;
         const button = source.querySelector("[data-action='add-to-collection']");
         if (button) button.textContent = "Collect";
+        if (button) button.style.pointerEvents = "all";
     };
 
     // Rebuild the saved collection, dropping any id whose source is no longer on the
