@@ -197,6 +197,10 @@ h1 {
     overflow: hidden;
 }
 
+.collection-content:has(> .collection-thumbnail) {
+    gap: .5rem;
+}
+
 .collection-content .text-style-quote {
     font-family: "Apercu Medium", Helvetica, Arial, sans-serif;
     font-size: 2rem;
@@ -209,6 +213,10 @@ h1 {
     height: auto;
     display: block;
     border-radius: 8px;
+}
+
+.collection-caption {
+    text-align: center;
 }
 
 main {

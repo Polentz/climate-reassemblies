@@ -143,6 +143,16 @@ const handleCollection = () => {
 
     const plainText = (el) => el.textContent.replace(/\s+/g, " ").trim();
 
+    // Marks an item's header as the thing you click to reveal the rest of it. The CSS
+    // hangs the pointer cursor and the arrow rotation off aria-expanded, so an item
+    // with nothing to reveal never gets this and stays inert.
+    const enableToggle = (item) => {
+        const toggle = item.querySelector(".interactive-item");
+        toggle.setAttribute("role", "button");
+        toggle.setAttribute("tabindex", "0");
+        toggle.setAttribute("aria-expanded", "false");
+    };
+
     // A collected text item shows a 500-character excerpt and stashes both versions,
     // so clicking its header can swap between them. Copy that already fits gets no toggle.
     const fillText = (source, content, item) => {
@@ -171,18 +181,16 @@ const handleCollection = () => {
         content.dataset.excerpt = short;
         content.classList.add("text-style-p");
 
-        const toggle = item.querySelector(".interactive-item");
-        toggle.setAttribute("role", "button");
-        toggle.setAttribute("tabindex", "0");
-        toggle.setAttribute("aria-expanded", "false");
+        enableToggle(item);
     };
 
     // An image item shows a thumbnail of the source image — same file, sized down by CSS.
-    const fillImage = (source, content) => {
+    // Its header opens the thumbnail out to the full width of the card.
+    const fillImage = (source, content, item) => {
         const image = source.querySelector("img");
         if (!image) return;
 
-        // const caption = source.querySelector("figcaption")?.textContent.trim();
+        enableToggle(item);
 
         const thumbnail = document.createElement("img");
         thumbnail.className = "collection-thumbnail";
@@ -191,11 +199,15 @@ const handleCollection = () => {
         thumbnail.loading = "lazy";
         content.append(thumbnail);
 
-        // if (!caption) return;
-        // const figcaption = document.createElement("p");
-        // figcaption.className = "text-style-caption";
-        // figcaption.textContent = caption;
-        // content.append(figcaption);
+        const caption = source.querySelector("figcaption")?.textContent.trim();
+        if (!caption) return;
+
+        // The caption rides along with the enlarged image, so it starts out of the flow.
+        const figcaption = document.createElement("p");
+        figcaption.className = "collection-caption text-style-caption";
+        figcaption.textContent = caption;
+        figcaption.hidden = true;
+        content.append(figcaption);
     };
 
     const collect = (source) => {
@@ -210,7 +222,7 @@ const handleCollection = () => {
         // the markup instead: carry an image and you get a thumbnail, otherwise text.
         const content = item.querySelector(".collection-content");
         if (source.querySelector("img")) {
-            fillImage(source, content);
+            fillImage(source, content, item);
         } else {
             fillText(source, content, item);
         }
@@ -238,16 +250,50 @@ const handleCollection = () => {
                 "-=0.2");
     };
 
-    const toggleExcerpt = (item) => {
-        const content = item.querySelector(".collection-content");
-        const toggle = item.querySelector(".interactive-item");
-        if (!content?.dataset.full) return;
+    // Expanded, the thumbnail fills the card and the caption appears beneath it; collapsed,
+    // the image falls back to the max-width the stylesheet gives it and the caption leaves
+    // the flow. Only the width is animated — the height follows the aspect ratio on its
+    // own, so the card grows with it.
+    const growThumbnail = (content, expanded) => {
+        const thumbnail = content.querySelector(".collection-thumbnail");
+        const caption = content.querySelector(".collection-caption");
+        const from = thumbnail.getBoundingClientRect().width;
 
-        const expanded = item.classList.toggle("expanded");
-        toggle.setAttribute("aria-expanded", String(expanded));
+        gsap.set(thumbnail, expanded ? { maxWidth: "100%" } : { clearProps: "maxWidth" });
+        if (caption && (expanded || reduced)) caption.hidden = !expanded;
 
-        // Measure the height we're leaving, swap the copy, then measure the height
-        // we're heading to — gsap animates between the two.
+        if (reduced) return;
+
+        const to = thumbnail.getBoundingClientRect().width;
+        gsap.fromTo(thumbnail,
+            { width: from },
+            { width: to, duration: 0.6, ease: "power3.inOut", overwrite: true, clearProps: "width" });
+
+        if (!caption) return;
+
+        // Coming in, the caption waits for the image to make room for it; going out, it
+        // clears off first and only leaves the flow once it has faded.
+        if (expanded) {
+            gsap.fromTo(caption,
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 0.4, delay: 0.25, ease: "power2.out", clearProps: "all" });
+        } else {
+            gsap.to(caption, {
+                opacity: 0,
+                y: 10,
+                duration: 0.25,
+                ease: "power2.in",
+                onComplete: () => {
+                    caption.hidden = true;
+                    gsap.set(caption, { clearProps: "all" });
+                },
+            });
+        }
+    };
+
+    // The copy swap: measure the height we're leaving, swap the copy, then measure the
+    // height we're heading to — gsap animates between the two.
+    const swapCopy = (content, expanded) => {
         const from = content.offsetHeight;
         content.innerHTML = expanded ? content.dataset.full : content.dataset.excerpt;
 
@@ -264,9 +310,25 @@ const handleCollection = () => {
             { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: "power2.out", delay: 0.12, clearProps: "all" });
     };
 
+    const toggleItem = (item) => {
+        const toggle = item.querySelector(".interactive-item");
+        // Only items that were given a toggle have something to reveal.
+        if (toggle.getAttribute("aria-expanded") === null) return;
+
+        const content = item.querySelector(".collection-content");
+        const expanded = item.classList.toggle("expanded");
+        toggle.setAttribute("aria-expanded", String(expanded));
+
+        if (content.querySelector(".collection-thumbnail")) {
+            growThumbnail(content, expanded);
+        } else {
+            swapCopy(content, expanded);
+        }
+    };
+
     container.addEventListener("click", (e) => {
         const toggle = e.target.closest(".interactive-item");
-        if (toggle) toggleExcerpt(toggle.closest(".collection-item"));
+        if (toggle) toggleItem(toggle.closest(".collection-item"));
     });
 
     container.addEventListener("keydown", (e) => {
@@ -274,7 +336,7 @@ const handleCollection = () => {
         const toggle = e.target.closest(".interactive-item");
         if (!toggle) return;
         e.preventDefault(); // Space would otherwise scroll the card.
-        toggleExcerpt(toggle.closest(".collection-item"));
+        toggleItem(toggle.closest(".collection-item"));
     });
 
     const markCollected = (source) => {
