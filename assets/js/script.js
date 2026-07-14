@@ -169,6 +169,7 @@ const handleCollection = () => {
         content.innerHTML = short;
         content.dataset.full = full;
         content.dataset.excerpt = short;
+        content.classList.add("text-style-p");
 
         const toggle = item.querySelector(".interactive-item");
         toggle.setAttribute("role", "button");
@@ -181,32 +182,34 @@ const handleCollection = () => {
         const image = source.querySelector("img");
         if (!image) return;
 
-        const caption = source.querySelector("figcaption")?.textContent.trim();
+        // const caption = source.querySelector("figcaption")?.textContent.trim();
 
         const thumbnail = document.createElement("img");
         thumbnail.className = "collection-thumbnail";
         thumbnail.src = image.getAttribute("src");
-        thumbnail.alt = image.getAttribute("alt") || caption || "";
+        thumbnail.alt = image.getAttribute("alt") || "";
         thumbnail.loading = "lazy";
         content.append(thumbnail);
 
-        if (!caption) return;
-        const figcaption = document.createElement("p");
-        figcaption.className = "text-style-caption";
-        figcaption.textContent = caption;
-        content.append(figcaption);
+        // if (!caption) return;
+        // const figcaption = document.createElement("p");
+        // figcaption.className = "text-style-caption";
+        // figcaption.textContent = caption;
+        // content.append(figcaption);
     };
 
     const collect = (source) => {
         const item = template.content.firstElementChild.cloneNode(true);
-        const { type = "Text", category = "" } = source.dataset;
+        const { type = "", category = "" } = source.dataset;
 
         item.dataset.type = type;
         item.querySelector("[data-label='category']").textContent = category;
-        // item.querySelector("[data-label='type']").textContent = type;
+        item.querySelector("[data-label='type']").textContent = type;
 
+        // data-type names the section the source came from, so the medium is read off
+        // the markup instead: carry an image and you get a thumbnail, otherwise text.
         const content = item.querySelector(".collection-content");
-        if (type === "Image") {
+        if (source.querySelector("img")) {
             fillImage(source, content);
         } else {
             fillText(source, content, item);
