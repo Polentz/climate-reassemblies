@@ -103,29 +103,73 @@ const handleSections = () => {
     });
 };
 
-const handleCollection = () => {
+const handleCollection = async () => {
     const EXCERPT_LENGTH = 500;
     const STORAGE_KEY = "climate-reassemblies.collection";
 
-    // Only the source ids are stored — every item is rebuilt from the page on load,
-    // so edits to the copy show up in a collection saved before the edit.
+    // A source only exists in the markup of the page that declares it, so an entry names
+    // its page alongside its id: to show the whole collection on every page, a page has to
+    // be able to go and fetch the markup of the ones it isn't.
+    const PAGE = location.pathname.split("/").pop() || "index.html";
+
+    // Nothing but ids is stored — every item is rebuilt from its source, so edits to the
+    // copy show up in a collection saved before the edit.
     const readStore = () => {
         try {
             const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
-            return Array.isArray(stored) ? stored : [];
+            if (!Array.isArray(stored)) return [];
+            // Collections saved before the site had a second page are bare ids with no
+            // page to attribute them to, so they are dropped rather than guessed at.
+            return stored.filter((entry) => typeof entry?.id === "string" && typeof entry?.page === "string");
         } catch {
             return [];
         }
     };
 
-    const writeStore = (ids) => {
+    const writeStore = (entries) => {
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
         } catch {
             // Private browsing and full quotas both throw here. The collection still
             // works for this visit; it just won't come back after a refresh.
         }
     };
+
+    // The site's other pages, taken off its own nav — a page added to the nav later is
+    // reachable here for free.
+    const pages = new Set([PAGE, ...[...document.querySelectorAll("a[href$='.html']")]
+        .map((link) => new URL(link.href, location.href))
+        .filter((url) => url.origin === location.origin)
+        .map((url) => url.pathname.split("/").pop())]);
+
+    // Each page's markup is parsed once and held, so restoring twenty items off another
+    // page costs one request, not twenty. A page that can't be fetched — the site opened
+    // straight off the filesystem, a request that fails — resolves to null, and its
+    // entries are left alone rather than treated as gone.
+    const documents = new Map([[PAGE, document]]);
+    const fetches = new Map();
+
+    const loadPage = (page) => {
+        // Storage is the user's to edit, so only a page the site itself links to is fetched.
+        if (!pages.has(page)) return Promise.resolve(null);
+        if (documents.has(page)) return Promise.resolve(documents.get(page));
+        if (fetches.has(page)) return fetches.get(page);
+
+        const pending = fetch(page)
+            .then((response) => (response.ok ? response.text() : Promise.reject(response.status)))
+            .then((html) => {
+                const parsed = new DOMParser().parseFromString(html, "text/html");
+                documents.set(page, parsed);
+                return parsed;
+            })
+            .catch(() => null);
+
+        fetches.set(page, pending);
+        return pending;
+    };
+
+    // Collected items carry their source id too, so rule them out of the lookup.
+    const sourceOf = (id, doc = document) => doc.querySelector(`[data-id="${CSS.escape(id)}"]:not(.collection-item)`);
 
     const excerpt = (text, limit = EXCERPT_LENGTH) => {
         const clean = text.replace(/\s+/g, " ").trim();
@@ -185,7 +229,7 @@ const handleCollection = () => {
 
     // An image item shows a thumbnail of the source image — same file, sized down by CSS.
     // Its header opens the thumbnail out to the full width of the card.
-    const fillImage = (source, content, item) => {
+    const fillImage = (source, content, item, page) => {
         const image = source.querySelector("img");
         if (!image) return;
 
@@ -193,7 +237,9 @@ const handleCollection = () => {
 
         const thumbnail = document.createElement("img");
         thumbnail.className = "collection-thumbnail";
-        thumbnail.src = image.getAttribute("src");
+        // The source's src is written relative to the page it sits on, which is not
+        // necessarily the page doing the rendering, so it is resolved against its own.
+        thumbnail.src = new URL(image.getAttribute("src"), new URL(page, location.href)).href;
         thumbnail.alt = image.getAttribute("alt") || "";
         thumbnail.loading = "lazy";
         // Images drag themselves by default, which would hijack the card's own drag.
@@ -211,20 +257,23 @@ const handleCollection = () => {
         content.append(figcaption);
     };
 
-    const collect = (source) => {
+    // `source` can belong to a page other than this one — it is only ever read from, so a
+    // source parsed out of fetched markup builds exactly the same card as a live one.
+    const collect = (source, page) => {
         const item = template.content.firstElementChild.cloneNode(true);
         const { type = "", category = "" } = source.dataset;
 
-        // The item carries its source id so the running order can be read straight off
-        // the DOM after a drag and written back to storage.
+        // The item carries its source id and page, so the running order can be read
+        // straight off the DOM after a drag and written back to storage.
         item.dataset.id = source.dataset.id;
+        item.dataset.page = page;
         item.dataset.type = type;
         item.querySelector("[data-label='category']").textContent = category;
         item.querySelector("[data-label='type']").textContent = type;
 
         const content = item.querySelector(".collection-content");
         if (source.querySelector("img")) {
-            fillImage(source, content, item);
+            fillImage(source, content, item, page);
         } else {
             fillText(source, content, item);
         }
@@ -355,7 +404,7 @@ const handleCollection = () => {
 
     // Hand the source back: its asterisk can collect it again.
     const releaseSource = (id) => {
-        const source = document.querySelector(`[data-id="${CSS.escape(id)}"]:not(.collection-item)`);
+        const source = sourceOf(id);
         if (!source) return;
 
         delete source.dataset.collected;
@@ -365,28 +414,47 @@ const handleCollection = () => {
         if (button) button.classList.remove("collected");
     };
 
-    // Rebuild the saved collection, dropping any id whose source is no longer on the
-    // page, then write the surviving ids back so the stale ones don't linger in storage.
-    const restore = () => {
-        const restored = readStore().filter((id) => {
-            // Collected items carry their source id too, so rule them out of the lookup.
-            const source = document.querySelector(`[data-id="${CSS.escape(id)}"]:not(.collection-item)`);
+    // Entries whose page could not be fetched, held at the index they occupied. They have
+    // no card on this page to read an order back off, so they are carried, not rebuilt.
+    const orphans = [];
+
+    // Rebuild the whole collection, whichever pages it was gathered from: an entry's source
+    // is looked up in its own page's markup, fetched if that page isn't this one. An entry
+    // is only stale — and only then dropped — if its page loaded and no longer holds it.
+    const restore = async () => {
+        const entries = readStore();
+        const docs = await Promise.all(entries.map((entry) => loadPage(entry.page)));
+
+        const kept = entries.filter((entry, index) => {
+            const doc = docs[index];
+            if (!doc) {
+                orphans.push({ index, entry });
+                return true;
+            }
+
+            const source = sourceOf(entry.id, doc);
             if (!source || source.dataset.collected === "true") return false;
+
+            // Marking the source of a fetched page has no visible effect — nobody is
+            // looking at it — but it still guards the same id being restored twice.
             markCollected(source);
-            collect(source);
+            collect(source, entry.page);
             return true;
         });
-        writeStore(restored);
-        return restored;
+
+        writeStore(kept);
     };
 
-    const collected = restore();
+    await restore();
 
     // Storage holds the running order, so re-read it off the DOM whenever that changes.
+    // Every collected item has a card here now, so the DOM is the order, in full.
     const saveOrder = () => {
-        collected.length = 0;
-        collected.push(...[...container.children].map((item) => item.dataset.id));
-        writeStore(collected);
+        const entries = [...container.children]
+            .map((item) => ({ id: item.dataset.id, page: item.dataset.page }));
+
+        orphans.forEach(({ index, entry }) => entries.splice(index, 0, entry));
+        writeStore(entries);
     };
 
     // Roll the card up and take it out of the list. Because it collapses in the flow, the
@@ -513,10 +581,8 @@ const handleCollection = () => {
         if (!source || source.dataset.collected === "true") return;
 
         markCollected(source);
-        revealItem(collect(source));
-
-        collected.push(source.dataset.id);
-        writeStore(collected);
+        revealItem(collect(source, PAGE));
+        saveOrder();
     });
 };
 
