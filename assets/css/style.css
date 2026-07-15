@@ -158,12 +158,23 @@ h1 {
 
 .collection-item {
     position: relative;
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     background: var(--color-white);
     border-radius: 30px;
     box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
     padding: 2rem;
     cursor: move;
-    transition: transform .5s cubic-bezier(.34, 1.56, .64, 1);
+    transition:
+        transform .5s cubic-bezier(.34, 1.56, .64, 1),
+        height .5s ease;
+}
+
+.collection-item.expanded {
+    height: fit-content;
 }
 
 .collection-remove {
@@ -195,12 +206,6 @@ h1 {
 
 .collection-remove:hover svg {
     transform: rotate(90deg);
-}
-
-.collection-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
 }
 
 .collection-item:hover {
@@ -280,10 +285,6 @@ h1 {
     overflow: hidden;
 }
 
-.collection-content:has(> .collection-thumbnail) {
-    gap: .5rem;
-}
-
 .collection-content .text-style-quote {
     font-family: "Apercu Medium", Helvetica, Arial, sans-serif;
     font-size: 2rem;
@@ -292,7 +293,7 @@ h1 {
 
 .collection-thumbnail {
     width: 100%;
-    max-width: 20rem;
+    /* max-width: 20rem; */
     height: auto;
     display: block;
 }
@@ -461,10 +462,6 @@ main {
     gap: 12px;
 }
 
-.gallery-grid:has(> .preview-item) {
-    gap: 2rem;
-}
-
 .gallery-item {
     position: relative;
     display: flex;
@@ -500,7 +497,11 @@ main {
     right: 1rem;
 }
 
-.preview-item {
+.list-item {
+    gap: 2rem;
+}
+
+.list-item-preview {
     height: fit-content;
     position: relative;
     overflow: hidden;
@@ -508,11 +509,19 @@ main {
     overflow: hidden;
 }
 
-.preview-item:hover {
+.list-item-preview:hover {
     border-radius: 30px;
 }
 
-.preview-item video {
+.list-item-preview:has(> .video-player) {
+    transition: none;
+}
+
+.list-item-preview:has(> .video-player):hover {
+    border-radius: 0;
+}
+
+.list-item-preview video {
     display: block;
     width: 100%;
     height: auto;
@@ -521,7 +530,7 @@ main {
     cursor: pointer;
 }
 
-.preview-item img {
+.list-item-preview img {
     display: block;
     width: 100%;
     height: auto;
@@ -529,28 +538,24 @@ main {
     object-fit: cover;
 }
 
-.preview-item h3 {
-    display: none;
-}
-
-.preview-item .interactive-item {
+.list-item-preview .interactive-item {
     position: absolute;
     top: 1rem;
     right: 1rem;
 }
 
-.preview-item-wrapper {
+.list-item-content {
     grid-column: span 2;
     display: flex;
     flex-direction: column;
     gap: 3rem;
 }
 
-.preview-item-header .text-style-label {
+.list-item-header .text-style-label {
     margin-bottom: 1rem;
 }
 
-.preview-item-description {
+.list-item-description {
     display: flex;
     flex-direction: column;
     gap: 1rem;

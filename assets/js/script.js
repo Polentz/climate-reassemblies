@@ -227,51 +227,93 @@ const handleCollection = async () => {
         enableToggle(item);
     };
 
-    // A media item shows a thumbnail of the source image or video — the same file, sized
-    // down by CSS. Its header opens the thumbnail out to the full width of the card. The
-    // thumbnail is a plain looping video, not the player: a card is something you look at
-    // and reorder, and a second set of controls in it would just fight the drag.
     const fillMedia = (source, media, content, item, page) => {
         enableToggle(item);
 
         const video = media.tagName === "VIDEO";
         const thumbnail = document.createElement(video ? "video" : "img");
         thumbnail.className = "collection-thumbnail";
-        // The source's src is written relative to the page it sits on, which is not
-        // necessarily the page doing the rendering, so it is resolved against its own.
         thumbnail.src = new URL(media.getAttribute("src"), new URL(page, location.href)).href;
 
         if (video) {
-            // Muted is what buys the autoplay: a browser will refuse to start a video that
-            // could make noise. Set as attributes as well as properties, since Safari reads
-            // muted and playsinline off the markup when it decides whether to allow it.
-            ["autoplay", "muted", "loop", "playsinline", "disablepictureinpicture"]
-                .forEach((attribute) => thumbnail.setAttribute(attribute, ""));
-            thumbnail.muted = true;
-
-            // A silent clip says little about itself, so the video keeps the heading it
-            // was filed under. It stands above the thumbnail and stays there, expanded or
-            // not — unlike the caption, which only comes out with the enlarged media.
-            const heading = source.querySelector("h3")?.textContent.trim();
-            if (heading) {
-                const title = document.createElement("h3");
-                title.className = "collection-title text-style-h3";
-                title.textContent = heading;
-                content.append(title);
-            }
+            const poster = media.getAttribute("poster");
+            if (poster) {
+                thumbnail.poster = new URL(poster, new URL(page, location.href)).href;
+            };
+            const heading = source.querySelector(".text-style-h3")?.textContent.trim();
+            const subheading = source.querySelector(".list-item-header .text-style-p")?.textContent.trim();
+            if (heading || subheading) {
+                const contentHeader = document.createElement("div");
+                contentHeader.className = "collection-content-header";
+                content.append(contentHeader);
+                if (heading) {
+                    const title = document.createElement("h3");
+                    title.className = "text-style-h3";
+                    title.textContent = heading;
+                    contentHeader.append(title);
+                };
+                if (subheading) {
+                    const subtitle = document.createElement("p");
+                    subtitle.className = "text-style-p";
+                    subtitle.textContent = subheading;
+                    contentHeader.append(subtitle);
+                };
+            };
+            const description = source.querySelector(".list-item-description");
+            if (description) {
+                const text = document.createElement("div");
+                text.className = "list-item-description text-style-caption";
+                text.innerHTML = description.innerHTML;
+                content.append(text);
+            };
         } else {
+            const heading = source.querySelector(".text-style-h3")?.textContent.trim();
+            const subheading = source.querySelector(".list-item-header .text-style-p")?.textContent.trim();
+            if (heading || subheading) {
+                const contentHeader = document.createElement("div");
+                contentHeader.className = "collection-content-header";
+                content.append(contentHeader);
+                if (heading) {
+                    const title = document.createElement("h3");
+                    title.className = "text-style-h3";
+                    title.textContent = heading;
+                    contentHeader.append(title);
+                };
+                if (subheading) {
+                    const subtitle = document.createElement("p");
+                    subtitle.className = "text-style-p";
+                    subtitle.textContent = subheading;
+                    contentHeader.append(subtitle);
+                };
+            };
+            const description = source.querySelector(".list-item-description");
+            if (description) {
+                const text = document.createElement("div");
+                text.className = "list-item-description text-style-caption";
+                text.innerHTML = description.innerHTML;
+                content.append(text);
+            };
             thumbnail.alt = media.getAttribute("alt") || "";
             thumbnail.loading = "lazy";
-        }
+        };
 
         // Media drags itself by default, which would hijack the card's own drag.
         thumbnail.draggable = false;
-        content.append(thumbnail);
+
+        const controls = video ? source.querySelector(".video-controls") : null;
+        if (controls) {
+            const player = document.createElement("div");
+            player.className = "video-player";
+            player.append(thumbnail, controls.cloneNode(true));
+            content.append(player);
+            handleVideoPlayers(player);
+        } else {
+            content.append(thumbnail);
+        };
 
         const caption = source.querySelector("figcaption")?.textContent.trim();
         if (!caption) return;
 
-        // The caption rides along with the enlarged image, so it starts out of the flow.
         const figcaption = document.createElement("p");
         figcaption.className = "collection-caption text-style-caption";
         figcaption.textContent = caption;
@@ -279,14 +321,10 @@ const handleCollection = async () => {
         content.append(figcaption);
     };
 
-    // `source` can belong to a page other than this one — it is only ever read from, so a
-    // source parsed out of fetched markup builds exactly the same card as a live one.
     const collect = (source, page) => {
         const item = template.content.firstElementChild.cloneNode(true);
         const { type = "", category = "" } = source.dataset;
 
-        // The item carries its source id and page, so the running order can be read
-        // straight off the DOM after a drag and written back to storage.
         item.dataset.id = source.dataset.id;
         item.dataset.page = page;
         item.dataset.type = type;
@@ -299,7 +337,7 @@ const handleCollection = async () => {
             fillMedia(source, media, content, item, page);
         } else {
             fillText(source, content, item);
-        }
+        };
 
         container.append(item);
         return item;
@@ -308,7 +346,6 @@ const handleCollection = async () => {
     const revealItem = (item) => {
         if (reduced) return;
 
-        // Unroll the card from nothing, then let its contents settle in behind it.
         gsap.timeline({ onComplete: () => gsap.set(item, { clearProps: "all" }) })
             .from(item, {
                 height: 0,
@@ -319,38 +356,19 @@ const handleCollection = async () => {
                 duration: 0.55,
                 ease: "power3.out",
             })
-            // Only what is on show at rest gets tweened. Anything waiting on a hover — the
-            // remove button, the arrow — rests at opacity 0, and a `from` tween would end by
-            // pinning that 0 into the inline style, where it outranks the hover rule and the
-            // thing could never appear at all.
             .from(item.querySelectorAll(".collection-header, .collection-content"),
                 { opacity: 0, y: 16, duration: 0.4, stagger: 0.1, ease: "power2.out", clearProps: "all" },
                 "-=0.2");
     };
 
-    // Expanded, the thumbnail fills the card and the caption appears beneath it; collapsed,
-    // the image falls back to the max-width the stylesheet gives it and the caption leaves
-    // the flow. Only the width is animated — the height follows the aspect ratio on its
-    // own, so the card grows with it.
     const growThumbnail = (content, expanded) => {
         const thumbnail = content.querySelector(".collection-thumbnail");
         const caption = content.querySelector(".collection-caption");
-        const from = thumbnail.getBoundingClientRect().width;
 
-        gsap.set(thumbnail, expanded ? { maxWidth: "100%" } : { clearProps: "maxWidth" });
         if (caption && (expanded || reduced)) caption.hidden = !expanded;
-
         if (reduced) return;
-
-        const to = thumbnail.getBoundingClientRect().width;
-        gsap.fromTo(thumbnail,
-            { width: from },
-            { width: to, duration: 0.6, ease: "power3.inOut", overwrite: true, clearProps: "width" });
-
         if (!caption) return;
 
-        // Coming in, the caption waits for the image to make room for it; going out, it
-        // clears off first and only leaves the flow once it has faded.
         if (expanded) {
             gsap.fromTo(caption,
                 { opacity: 0, y: 10 },
@@ -366,26 +384,13 @@ const handleCollection = async () => {
                     gsap.set(caption, { clearProps: "all" });
                 },
             });
-        }
+        };
     };
 
-    // The copy swap: measure the height we're leaving, swap the copy, then measure the
-    // height we're heading to — gsap animates between the two.
-    const swapCopy = (content, expanded) => {
-        const from = content.offsetHeight;
+    const growContent = (content, expanded) => {
         content.innerHTML = expanded ? content.dataset.full : content.dataset.excerpt;
-
         if (reduced) return;
-
         gsap.set(content, { height: "auto" });
-        const to = content.offsetHeight;
-
-        gsap.fromTo(content,
-            { height: from },
-            { height: to, duration: 0.6, ease: "power3.inOut", overwrite: true, clearProps: "height" });
-        gsap.fromTo(content.children,
-            { opacity: 0, y: 12 },
-            { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: "power2.out", delay: 0.12, clearProps: "all" });
     };
 
     const toggleItem = (item) => {
@@ -400,7 +405,7 @@ const handleCollection = async () => {
         if (content.querySelector(".collection-thumbnail")) {
             growThumbnail(content, expanded);
         } else {
-            swapCopy(content, expanded);
+            growContent(content, expanded);
         }
     };
 
@@ -609,8 +614,12 @@ const handleCollection = async () => {
     });
 };
 
-const handleVideoPlayers = () => {
-    const players = [...document.querySelectorAll(".video-player")];
+// `scope` lets a single, freshly-built player (e.g. a collected card) be wired up
+// on its own, rather than only the ones present on the page at load.
+const handleVideoPlayers = (scope = document) => {
+    const players = scope.matches?.(".video-player")
+        ? [scope]
+        : [...scope.querySelectorAll(".video-player")];
     if (!players.length) return;
 
     const clock = (seconds) => {
@@ -622,6 +631,11 @@ const handleVideoPlayers = () => {
     };
 
     players.forEach((player) => {
+        // A player only ever gets its listeners once, so re-running over the whole
+        // page (or the same card twice) can't double-bind.
+        if (player.dataset.playerReady) return;
+        player.dataset.playerReady = "1";
+
         const video = player.querySelector("video");
         const playButton = player.querySelector("[data-action='toggle-play']");
         const muteButton = player.querySelector("[data-action='toggle-mute']");
