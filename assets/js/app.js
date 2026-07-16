@@ -8,7 +8,7 @@ const headerEl = document.querySelector('header');
 // Show a "progress" cursor only while glyphs are actually in motion
 function setHeaderBusy(busy) {
   if (headerEl) headerEl.style.cursor = busy ? 'progress' : 'default';
-}
+};
 
 // Layout/state based on dynamic absolute-position slots with fixed ink gaps
 const state = {
@@ -26,7 +26,7 @@ const state = {
 // Gap (px) that follows the character at position i in the original phrase
 function gapAfter(i) {
   return (state.chars[i] === ' ' ? state.wordGap : state.letterGap) * state.gapUnit;
-}
+};
 
 // Runtime configuration
 const config = {
@@ -48,9 +48,6 @@ function createGlyphs(phrase) {
   lineEl.textContent = phrase;
   const split = new SplitText(lineEl, { type: 'chars', charsClass: 'glyph' });
 
-  // SplitText doesn't create elements for whitespace, but the layout and
-  // scramble logic index glyphs against every character in the phrase
-  // (spaces included). Re-insert placeholder spans so indices stay aligned.
   const fragments = [];
   state.chars = [];
   let charCursor = 0;
@@ -74,7 +71,7 @@ function measureLine() {
   const containerRect = lineEl.getBoundingClientRect();
   const fontHeight = containerRect.height; // used for the vertical offset track
   return { fontHeight, containerRect };
-}
+};
 
 function setupAbsoluteSlots(glyphs) {
   const { containerRect } = measureLine();
@@ -132,7 +129,7 @@ function setupAbsoluteSlots(glyphs) {
     // otherwise override the .abs class
     gsap.set(g, { position: 'absolute', top: 0, left: 0, x: state.xPositions[i], y: 0 });
   });
-}
+};
 
 // Calculates target x positions for a given glyph order
 function computeXPositionsForOrder(order) {
@@ -145,7 +142,7 @@ function computeXPositionsForOrder(order) {
     cursor += state.widths[glyphIndex] + gapAfter(i);
   }
   return x;
-}
+};
 
 function planReassemblySlots() {
   const count = state.glyphs.length;
@@ -188,7 +185,7 @@ function planReassemblySlots() {
   }
 
   return { movingPositions, newOrder, newX, moves };
-}
+};
 
 function runCycle() {
   const measure = measureLine();
@@ -242,7 +239,7 @@ function runCycle() {
   });
 
   return tl;
-}
+};
 
 // Secret scramble text reveal back to original layout over ~2 seconds
 function scrambleRevealToOriginal(onDone) {
@@ -321,7 +318,7 @@ function scrambleRevealToOriginal(onDone) {
 
     requestAnimationFrame(step);
   }, startDelayMs);
-}
+};
 
 let schedulerIntervalId = null;
 let schedulerRunning = false;
@@ -363,28 +360,7 @@ function startScheduler() {
   tick();
   if (schedulerIntervalId) clearInterval(schedulerIntervalId);
   schedulerIntervalId = setInterval(tick, config.tickIntervalMs);
-}
-
-function stopScheduler() {
-  schedulerRunning = false;
-  setHeaderBusy(false);
-  if (schedulerIntervalId) { clearInterval(schedulerIntervalId); schedulerIntervalId = null; }
-  schedulerTimeouts.forEach(clearTimeout);
-  schedulerTimeouts = [];
-}
-
-// Instantly kill any in-flight motion and snap glyphs back to the original layout
-function restoreInitialState() {
-  const targetX = computeXPositionsForOrder(state.initialOrder);
-  state.order = [...state.initialOrder];
-  state.xPositions = targetX;
-  state.glyphs.forEach((g, i) => {
-    gsap.killTweensOf(g);
-    resetBlur(g);
-    g.textContent = state.chars[i]; // undo any scramble characters
-    gsap.set(g, { x: targetX[i], y: 0 });
-  });
-}
+};
 
 window.addEventListener('DOMContentLoaded', () => {
   const glyphs = createGlyphs(PHRASE);
@@ -394,11 +370,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 lineEl.addEventListener("mouseenter", () => {
   startScheduler();
-});
-
-lineEl.addEventListener("mouseleave", () => {
-  stopScheduler();
-  restoreInitialState();
 });
 
 
