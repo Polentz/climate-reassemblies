@@ -10,7 +10,7 @@ function setHeaderBusy(busy) {
   if (headerEl) headerEl.style.cursor = busy ? 'progress' : 'default';
 }
 
-// Layout/state based on dynamic absolute-position slots with a fixed 5px ink gap
+// Layout/state based on dynamic absolute-position slots with fixed ink gaps
 const state = {
   glyphs: [],
   widths: [],          // measured INK width for each glyph (px)
@@ -20,11 +20,17 @@ const state = {
   posOfGlyph: [],      // glyphIndex -> position
   xPositions: [],      // position -> left x (px)
   initialOrder: [],
-  gapUnit: 5,
-  letterGap: 2, // 2x unit
-  wordGap: 12,  // 6x unit
+  gapUnit: 2,   // base gap unit (px)
+  letterGap: 1, // 1x unit between letters
+  wordGap: 6,   // 6x units between words
   cycleCount: 0
 };
+
+// Gap (px) that follows the character at position i in the original phrase
+function gapAfter(i) {
+  const isSpace = state.chars[i] === ' ' || state.chars[i] === '';
+  return (isSpace ? state.wordGap : state.letterGap) * state.gapUnit;
+}
 
 // Runtime configuration, adjustable via UI controls
 const config = {
@@ -32,7 +38,7 @@ const config = {
   ticksPerCycle: 1,
   maxGroupSize: 12,
   enableFontEffect: false,
-  enableBlurEffect: false,
+  enableBlurEffect: true,
   scrambleDurationMs: 500,
   scrambleDelayMs: 1000,
   motionDurationMs: 1000,
@@ -125,14 +131,12 @@ function setupAbsoluteSlots(glyphs) {
   state.order = glyphs.map((_, i) => i); // initial order is index order
   state.initialOrder = [...state.order];
 
-  // Compute tight positions with constant 5px gaps based on measured widths
+  // Compute tight positions with constant unit gaps based on measured widths
   state.xPositions = [];
   let cursor = 0;
   for (let i = 0; i < glyphs.length; i++) {
     state.xPositions[i] = cursor;
-    // Determine spacing: 6x between words, 2x between letters
-    const spaceAfter = (state.chars[i] === ' ' || state.chars[i] === '') ? state.wordGap : state.letterGap;
-    cursor += state.widths[i] + spaceAfter;
+    cursor += state.widths[i] + gapAfter(i);
   }
   // Size the container to the actual glyph layout (not the natural text
   // width) so the last glyph isn't clipped when custom gaps run wider
@@ -159,10 +163,8 @@ function computeXPositionsForOrder(order) {
   for (let i = 0; i < order.length; i++) {
     const glyphIndex = order[i];
     x[i] = cursor;
-    // Determine whether a word boundary follows this position in original chars
-    const isSpace = state.chars[i] === ' ' || state.chars[i] === '';
-    const gap = isSpace ? state.wordGap : state.letterGap;
-    cursor += state.widths[glyphIndex] + gap;
+    // Word boundaries stay tied to positions in the original phrase
+    cursor += state.widths[glyphIndex] + gapAfter(i);
   }
   return x;
 }
@@ -426,10 +428,10 @@ function startScheduler() {
         if (!schedulerRunning) return;
         if (tickCount >= config.ticksPerCycle) {
           // run secret scramble reveal, then reset counter and unlock
-          // scrambleRevealToOriginal(() => {
-          //   tickCount = 0;
-          //   locked = false;
-          // });
+          scrambleRevealToOriginal(() => {
+            tickCount = 0;
+            locked = false;
+          });
           return;// disable scramble reveal for now
         } else {
           locked = false;
@@ -477,9 +479,9 @@ lineEl.addEventListener("mouseenter", () => {
   startScheduler();
 });
 
-lineEl.addEventListener("mouseleave", () => {
-  stopScheduler();
-  restoreInitialState();
-});
+// lineEl.addEventListener("mouseleave", () => {
+//   stopScheduler();
+//   restoreInitialState();
+// });
 
 
