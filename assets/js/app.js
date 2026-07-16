@@ -3,12 +3,6 @@ gsap.registerPlugin(SplitText);
 const PHRASE = "Climate ReAssemblies";
 
 const lineEl = document.getElementById('line');
-const headerEl = document.querySelector('header');
-
-// Show a "progress" cursor only while glyphs are actually in motion
-const setHeaderBusy = (busy) => {
-  if (headerEl) headerEl.style.cursor = busy ? 'progress' : 'default';
-};
 
 // Layout/state based on dynamic absolute-position slots with fixed ink gaps
 const state = {
@@ -200,7 +194,7 @@ const runCycle = () => {
   const leg = totalDur / 4 / 1000; // GSAP durations are in seconds
   const ease = 'power3.inOut';
   const stagger = 0.06;
-  const tl = gsap.timeline({ defaults: { ease }, onStart: () => setHeaderBusy(true) });
+  const tl = gsap.timeline({ defaults: { ease } });
 
   moves.forEach((m, idx) => {
     const g = state.glyphs[m.glyphIndex];
@@ -235,7 +229,6 @@ const runCycle = () => {
     // Commit new order and x positions
     state.order = newOrder;
     state.xPositions = newX;
-    setHeaderBusy(false);
   });
 
   return tl;
@@ -256,8 +249,6 @@ const scrambleRevealToOriginal = (onDone) => {
     state.glyphs.forEach((g, i) => {
       gsap.set(g, { x: targetXPositions[i], y: 0 });
     });
-
-    setHeaderBusy(true);
 
     // Use configured scramble duration
     const durationMs = config.scrambleDurationMs;
@@ -311,7 +302,6 @@ const scrambleRevealToOriginal = (onDone) => {
         state.order = [...state.initialOrder];
         state.xPositions = targetXPositions;
         state.glyphs.forEach((g, i) => { gsap.set(g, { x: state.xPositions[i], y: 0 }); });
-        setHeaderBusy(false);
         if (typeof onDone === 'function') onDone();
       }
     };
