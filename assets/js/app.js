@@ -14,30 +14,25 @@ function setHeaderBusy(busy) {
 const state = {
   glyphs: [],
   widths: [],          // measured INK width for each glyph (px)
-  leftOffsets: [],     // ink left bearing offset (px)
   chars: [],
   order: [],           // position -> glyphIndex
-  posOfGlyph: [],      // glyphIndex -> position
   xPositions: [],      // position -> left x (px)
   initialOrder: [],
   gapUnit: 2,   // base gap unit (px)
   letterGap: 1, // 1x unit between letters
-  wordGap: 6,   // 6x units between words
-  cycleCount: 0
+  wordGap: 6    // 6x units between words
 };
 
 // Gap (px) that follows the character at position i in the original phrase
 function gapAfter(i) {
-  const isSpace = state.chars[i] === ' ' || state.chars[i] === '';
-  return (isSpace ? state.wordGap : state.letterGap) * state.gapUnit;
+  return (state.chars[i] === ' ' ? state.wordGap : state.letterGap) * state.gapUnit;
 }
 
-// Runtime configuration, adjustable via UI controls
+// Runtime configuration
 const config = {
   tickIntervalMs: 8000,
   ticksPerCycle: 1,
   maxGroupSize: 12,
-  enableFontEffect: false,
   enableBlurEffect: true,
   scrambleDurationMs: 500,
   scrambleDelayMs: 1000,
@@ -45,11 +40,6 @@ const config = {
   preCycleHoldMs: 0
 };
 
-const FONT_BASE = "'Apercu Bold', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'";
-const ALT_FONTS = ["'Playfair Display', serif", "'Roboto Mono', monospace", "'Rubik', sans-serif"];
-function pickAltFont() { return ALT_FONTS[Math.floor(Math.random() * ALT_FONTS.length)]; }
-function setMovingFont(el) { if (!config.enableFontEffect) return; el.style.fontFamily = pickAltFont(); }
-function resetFont(el) { el.style.fontFamily = FONT_BASE; }
 const BLUR_PX = 2;
 function setMovingBlur(el) { if (!config.enableBlurEffect) return; el.style.filter = `blur(${BLUR_PX}px)`; }
 function resetBlur(el) { el.style.filter = 'none'; }
@@ -80,20 +70,16 @@ function createGlyphs(phrase) {
   return fragments;
 }
 
-function measureGlyphs(glyphs) {
-  const rects = glyphs.map(g => g.getBoundingClientRect());
+function measureLine() {
   const containerRect = lineEl.getBoundingClientRect();
-  const baselineY = containerRect.top + containerRect.height; // approximate baseline
-  const fontHeight = containerRect.height; // used for 1.5x vertical move
-  return { rects, baselineY, fontHeight, containerRect };
+  const fontHeight = containerRect.height; // used for the vertical offset track
+  return { fontHeight, containerRect };
 }
 
 function setupAbsoluteSlots(glyphs) {
-  const { rects, containerRect } = measureGlyphs(glyphs);
+  const { containerRect } = measureLine();
   // Fix container height so absolutely positioned children don't collapse it
   lineEl.style.height = `${containerRect.height}px`;
-  lineEl.style.width = `${containerRect.width}px`;
-  const left0 = containerRect.left;
 
   state.glyphs = glyphs;
   // Create a cloned, tight-measure layer to estimate ink bounds
@@ -108,12 +94,10 @@ function setupAbsoluteSlots(glyphs) {
   document.body.appendChild(measureLayer);
 
   state.widths = [];
-  state.leftOffsets = [];
   for (let i = 0; i < glyphs.length; i++) {
     const ch = state.chars[i];
     if (ch === ' ') {
       state.widths[i] = 0;
-      state.leftOffsets[i] = 0;
       continue;
     }
     const box = document.createElement('span');
@@ -122,9 +106,8 @@ function setupAbsoluteSlots(glyphs) {
     box.style.padding = '0 2px'; // guard for potential clipping
     measureLayer.appendChild(box);
     const r = box.getBoundingClientRect();
-    // approximate ink width as element width; leftOffsets set to 0 due to font variance
+    // approximate ink width as element width
     state.widths[i] = r.width - 2; // remove artificial padding
-    state.leftOffsets[i] = 0;
     measureLayer.removeChild(box);
   }
   document.body.removeChild(measureLayer);
@@ -147,16 +130,11 @@ function setupAbsoluteSlots(glyphs) {
     g.classList.add('abs');
     // position set inline too: SplitText may leave inline styles that would
     // otherwise override the .abs class
-    gsap.set(g, { position: 'absolute', top: 0, left: 0, x: state.xPositions[i] - state.leftOffsets[i], y: 0 });
+    gsap.set(g, { position: 'absolute', top: 0, left: 0, x: state.xPositions[i], y: 0 });
   });
 }
 
-// Utility to clamp a value
-// function clamp(value, min, max) {
-//   return Math.min(max, Math.max(min, value));
-// }
-
-// Calculates target indices for selected glyphs and prevents offscreen
+// Calculates target x positions for a given glyph order
 function computeXPositionsForOrder(order) {
   const x = [];
   let cursor = 0;
@@ -204,24 +182,21 @@ function planReassemblySlots() {
   // Describe moves for selected glyphs
   const moves = [];
   for (let k = 0; k < movingPositions.length; k++) {
-    const fromPos = movingPositions[k];
-    const toPos = shuffled[k];
-    const glyphIndex = state.order[fromPos];
-    const targetX = newX[toPos];
-    moves.push({ glyphIndex, fromPos, toPos, targetX });
+    const glyphIndex = state.order[movingPositions[k]];
+    const targetX = newX[shuffled[k]];
+    moves.push({ glyphIndex, targetX });
   }
 
   return { movingPositions, newOrder, newX, moves };
 }
 
 function runCycle() {
-  const measure = measureGlyphs(state.glyphs);
+  const measure = measureLine();
   const vOffset = measure.fontHeight * 1.3;
   const canMoveUp = measure.containerRect.top - vOffset >= 0;
   const canMoveDown = measure.containerRect.bottom + vOffset <= window.innerHeight;
 
-  const plan = planReassemblySlots();
-  const { newOrder, newX, moves, movingPositions } = plan;
+  const { newOrder, newX, moves, movingPositions } = planReassemblySlots();
   // derive leg durations from motionDurationMs (total approximated ~ leg*4)
   const totalDur = Math.max(200, Math.min(config.motionDurationMs, config.tickIntervalMs));
   // proportions: up/down:1, horiz:1, settle:2 → 4 parts
@@ -236,16 +211,12 @@ function runCycle() {
     if (goUp && !canMoveUp && canMoveDown) goUp = false;
     if (!goUp && !canMoveDown && canMoveUp) goUp = true;
     const offset = (!canMoveUp && !canMoveDown) ? 0 : (goUp ? -vOffset : vOffset);
-    // Start: ensure default font, apply blur if enabled during motion
-    tl.call(() => { resetFont(g); setMovingBlur(g); }, null, 0 + idx * stagger);
+    // Start: apply blur if enabled during motion
+    tl.call(() => { setMovingBlur(g); }, null, 0 + idx * stagger);
     // 1) Vertical move to offset track
     tl.to(g, { y: offset, duration: leg }, 0 + idx * stagger);
-    // When on the offset track, enable random font for horizontal motion only
-    tl.call(() => { setMovingFont(g); }, null, leg + idx * stagger);
     // 2) Horizontal move along the offset track
     tl.to(g, { x: m.targetX, duration: leg }, leg + idx * stagger);
-    // Before starting final vertical, return to default font (must be default on vertical)
-    tl.call(() => { resetFont(g); }, null, leg * 2 + idx * stagger);
     // revert blur 0.3s before the glyph fully settles on the baseline
     const perGlyphTotal = leg + leg + leg * 2; // full per-glyph duration
     const revertAt = Math.max(0, perGlyphTotal - 0.3);
@@ -259,7 +230,7 @@ function runCycle() {
   nonMovingPositions.forEach(p => {
     const glyphIndex = state.order[p];
     const g = state.glyphs[glyphIndex];
-    // quick, subtle move during the horizontal phase (no font change for non-moving)
+    // quick, subtle move during the horizontal phase
     tl.to(g, { x: newX[p], duration: 0.12 }, leg + 0.02);
   });
 
@@ -267,59 +238,10 @@ function runCycle() {
     // Commit new order and x positions
     state.order = newOrder;
     state.xPositions = newX;
-    state.posOfGlyph = state.glyphs.map((_, i) => state.order.indexOf(i));
     setHeaderBusy(false);
   });
 
   return tl;
-}
-
-function animateReturnToOriginal(onDone) {
-  const measure = measureGlyphs(state.glyphs);
-  const vOffset = measure.fontHeight * 1.0;
-  const canMoveUp = measure.containerRect.top - vOffset >= 0;
-  const canMoveDown = measure.containerRect.bottom + vOffset <= window.innerHeight;
-
-  const retTotalMs = Math.max(200, Math.min(Math.floor(config.motionDurationMs / 5), config.tickIntervalMs));
-  const leg = (retTotalMs / 4) / 1000; // seconds
-  const ease = 'power3.inOut';
-  const tl = gsap.timeline({ defaults: { ease } });
-  const stagger = 0.04;
-
-  const targetXPositions = computeXPositionsForOrder(state.initialOrder);
-  for (let gIdx = 0; gIdx < state.glyphs.length; gIdx++) {
-    const g = state.glyphs[gIdx];
-    const targetX = targetXPositions[gIdx];
-
-    let goUp = Math.random() < 0.5;
-    if (goUp && !canMoveUp && canMoveDown) goUp = false;
-    if (!goUp && !canMoveDown && canMoveUp) goUp = true;
-    const offset = (!canMoveUp && !canMoveDown) ? 0 : (goUp ? -vOffset : vOffset);
-    // Start: default font, blur during motion
-    tl.call(() => { resetFont(g); setMovingBlur(g); }, null, 0 + gIdx * stagger);
-    // 1) Vertical to offset track
-    tl.to(g, { y: offset, duration: leg }, 0 + gIdx * stagger);
-    // On offset tracks, allow random font during horizontal motion
-    tl.call(() => { setMovingFont(g); }, null, leg + gIdx * stagger);
-    // 2) Horizontal move
-    tl.to(g, { x: targetX, duration: leg }, leg + gIdx * stagger);
-    // Before final vertical, return to default font
-    tl.call(() => { resetFont(g); }, null, leg * 2 + gIdx * stagger);
-    const perGlyphTotal = leg + leg + leg * 2;
-    const revertAt = Math.max(0, perGlyphTotal - 0.3);
-    tl.call(() => { resetBlur(g); }, null, revertAt + gIdx * stagger);
-    // 3) Vertical back to baseline
-    tl.to(g, { y: 0, duration: leg * 2 }, leg * 2 + gIdx * stagger);
-  }
-
-  tl.eventCallback('onComplete', () => {
-    // Reset state to original mapping and exact positions
-    state.order = [...state.initialOrder];
-    state.posOfGlyph = state.glyphs.map((_, i) => i);
-    state.xPositions = targetXPositions;
-    state.glyphs.forEach((g, i) => { gsap.set(g, { x: state.xPositions[i], y: 0 }); });
-    if (typeof onDone === 'function') onDone();
-  });
 }
 
 // Secret scramble text reveal back to original layout over ~2 seconds
@@ -329,8 +251,8 @@ function scrambleRevealToOriginal(onDone) {
   setTimeout(() => {
     // Kill any in-flight tweens to avoid conflicts
     state.glyphs.forEach(g => gsap.killTweensOf(g));
-    // Ensure all fonts reset before scramble
-    state.glyphs.forEach(g => { resetFont(g); resetBlur(g); });
+    // Ensure blur is cleared before scramble
+    state.glyphs.forEach(g => resetBlur(g));
 
     const targetXPositions = computeXPositionsForOrder(state.initialOrder);
     // Snap all glyphs back to their original slots instantly
@@ -347,7 +269,7 @@ function scrambleRevealToOriginal(onDone) {
 
     // Character set for scrambling (inspired by classic decoder effects)
     const scrambleChars = '!<>-[]+*?#ABCEILRS'.split('');
-    const isSpaceAt = (i) => state.chars[i] === ' ' || state.chars[i] === '';
+    const isSpaceAt = (i) => state.chars[i] === ' ';
     const randChar = () => scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
 
     // Assign a settle time per glyph across the shorter window
@@ -378,8 +300,6 @@ function scrambleRevealToOriginal(onDone) {
           }
         } else {
           g.textContent = state.chars[i];
-          // Reset to base font when settled
-          resetFont(g);
         }
       }
 
@@ -392,7 +312,6 @@ function scrambleRevealToOriginal(onDone) {
           if (!plan[i].isSpace) g.textContent = state.chars[i];
         }
         state.order = [...state.initialOrder];
-        state.posOfGlyph = state.glyphs.map((_, i) => i);
         state.xPositions = targetXPositions;
         state.glyphs.forEach((g, i) => { gsap.set(g, { x: state.xPositions[i], y: 0 }); });
         setHeaderBusy(false);
@@ -432,7 +351,7 @@ function startScheduler() {
             tickCount = 0;
             locked = false;
           });
-          return;// disable scramble reveal for now
+          return;
         } else {
           locked = false;
         }
@@ -458,11 +377,9 @@ function stopScheduler() {
 function restoreInitialState() {
   const targetX = computeXPositionsForOrder(state.initialOrder);
   state.order = [...state.initialOrder];
-  state.posOfGlyph = state.glyphs.map((_, i) => i);
   state.xPositions = targetX;
   state.glyphs.forEach((g, i) => {
     gsap.killTweensOf(g);
-    resetFont(g);
     resetBlur(g);
     g.textContent = state.chars[i]; // undo any scramble characters
     gsap.set(g, { x: targetX[i], y: 0 });
@@ -479,9 +396,9 @@ lineEl.addEventListener("mouseenter", () => {
   startScheduler();
 });
 
-// lineEl.addEventListener("mouseleave", () => {
-//   stopScheduler();
-//   restoreInitialState();
-// });
+lineEl.addEventListener("mouseleave", () => {
+  stopScheduler();
+  restoreInitialState();
+});
 
 
