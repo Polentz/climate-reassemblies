@@ -321,36 +321,37 @@ const scrambleRevealToOriginal = (onDone) => {
 };
 
 let schedulerIntervalId = null;
-const startScheduler = () => {
-  // ensure no overlap; use config-driven cadence and cycle length
-  let locked = false;
-  let tickCount = 0;
+// Shared across scheduler restarts, so a re-trigger (hover, section change)
+// while a cycle is in flight skips its immediate tick instead of overlapping it
+let cycleLocked = false;
+let tickCount = 0;
 
-  const tick = () => {
-    if (locked) return;
-    locked = true;
-    // wait pre-cycle hold, then run the cycle
+const tick = () => {
+  if (cycleLocked) return;
+  cycleLocked = true;
+  // wait pre-cycle hold, then run the cycle
+  setTimeout(() => {
+    runCycle();
+    tickCount += 1;
+
+    // unlock after forward completes, derived from motion duration with small buffer
+    const forwardDoneMs = Math.min(config.tickIntervalMs, Math.max(200, config.motionDurationMs)) + 180;
     setTimeout(() => {
-      runCycle();
-      tickCount += 1;
+      if (tickCount >= config.ticksPerCycle) {
+        // run secret scramble reveal, then reset counter and unlock
+        scrambleRevealToOriginal(() => {
+          tickCount = 0;
+          cycleLocked = false;
+        });
+      } else {
+        cycleLocked = false;
+      }
+    }, forwardDoneMs);
+  }, Math.max(0, config.preCycleHoldMs));
+};
 
-      // unlock after forward completes, derived from motion duration with small buffer
-      const forwardDoneMs = Math.min(config.tickIntervalMs, Math.max(200, config.motionDurationMs)) + 180;
-      setTimeout(() => {
-        if (tickCount >= config.ticksPerCycle) {
-          // run secret scramble reveal, then reset counter and unlock
-          scrambleRevealToOriginal(() => {
-            tickCount = 0;
-            locked = false;
-          });
-        } else {
-          locked = false;
-        }
-      }, forwardDoneMs);
-    }, Math.max(0, config.preCycleHoldMs));
-  };
-
-  // initial immediate tick, then schedule
+const startScheduler = () => {
+  // immediate tick (a no-op while a cycle is in flight), then schedule
   tick();
   if (schedulerIntervalId) clearInterval(schedulerIntervalId);
   schedulerIntervalId = setInterval(tick, config.tickIntervalMs);
