@@ -104,7 +104,7 @@ const handleSections = () => {
 };
 
 const handleCollection = async () => {
-    const EXCERPT_LENGTH = 500;
+    const EXCERPT_LENGTH = 300;
     const STORAGE_KEY = "climate-reassemblies.collection";
 
     // A source only exists in the markup of the page that declares it, so an entry names
