@@ -42,7 +42,7 @@ body {
 header {
     position: fixed;
     top: 1rem;
-    right: 2rem;
+    right: 4rem;
     padding: 1rem 2rem;
     z-index: 1000;
     background: var(--color-white);

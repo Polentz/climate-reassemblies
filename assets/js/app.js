@@ -1,3 +1,5 @@
+gsap.registerPlugin(SplitText);
+
 const PHRASE = "Climate ReAssemblies";
 
 const lineEl = document.getElementById('line');
@@ -20,7 +22,7 @@ const state = {
   initialOrder: [],
   gapUnit: 5,
   letterGap: 2, // 2x unit
-  wordGap: 2,   // 6x unit
+  wordGap: 12,  // 6x unit
   cycleCount: 0
 };
 
@@ -47,17 +49,27 @@ function setMovingBlur(el) { if (!config.enableBlurEffect) return; el.style.filt
 function resetBlur(el) { el.style.filter = 'none'; }
 
 function createGlyphs(phrase) {
-  lineEl.innerHTML = '';
+  lineEl.textContent = phrase;
+  const split = new SplitText(lineEl, { type: 'chars', charsClass: 'glyph' });
+
+  // SplitText doesn't create elements for whitespace, but the layout and
+  // scramble logic index glyphs against every character in the phrase
+  // (spaces included). Re-insert placeholder spans so indices stay aligned.
   const fragments = [];
   state.chars = [];
+  let charCursor = 0;
   for (let i = 0; i < phrase.length; i++) {
     const ch = phrase[i];
-    const span = document.createElement('span');
-    span.className = 'glyph';
-    span.textContent = ch;
-    lineEl.appendChild(span);
     state.chars.push(ch);
-    fragments.push(span);
+    if (ch === ' ') {
+      const span = document.createElement('span');
+      span.className = 'glyph';
+      const nextChar = split.chars[charCursor];
+      if (nextChar) nextChar.before(span); else lineEl.appendChild(span);
+      fragments.push(span);
+    } else {
+      fragments.push(split.chars[charCursor++]);
+    }
   }
   return fragments;
 }
@@ -122,10 +134,16 @@ function setupAbsoluteSlots(glyphs) {
     const spaceAfter = (state.chars[i] === ' ' || state.chars[i] === '') ? state.wordGap : state.letterGap;
     cursor += state.widths[i] + spaceAfter;
   }
+  // Size the container to the actual glyph layout (not the natural text
+  // width) so the last glyph isn't clipped when custom gaps run wider
+  const lastIdx = glyphs.length - 1;
+  lineEl.style.width = `${state.xPositions[lastIdx] + state.widths[lastIdx]}px`;
 
   glyphs.forEach((g, i) => {
     g.classList.add('abs');
-    gsap.set(g, { x: state.xPositions[i] - state.leftOffsets[i], y: 0 });
+    // position set inline too: SplitText may leave inline styles that would
+    // otherwise override the .abs class
+    gsap.set(g, { position: 'absolute', top: 0, left: 0, x: state.xPositions[i] - state.leftOffsets[i], y: 0 });
   });
 }
 
