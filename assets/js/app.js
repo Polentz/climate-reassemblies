@@ -366,4 +366,8 @@ lineEl.addEventListener("mouseenter", () => {
   startScheduler();
 });
 
+document.addEventListener("sectionchange", () => {
+  startScheduler();
+});
+
 

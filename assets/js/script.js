@@ -44,6 +44,7 @@ const handleSections = () => {
         if (section.classList.contains("current")) return;
 
         sections.forEach((s) => s.classList.toggle("current", s === section));
+        document.dispatchEvent(new CustomEvent("sectionchange", { detail: { section } }));
         // section.scrollTop = 0;
 
         if (reduced) {
