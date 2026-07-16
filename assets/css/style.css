@@ -156,6 +156,21 @@ h1 {
     grid-template-columns: repeat(2, 1fr);
 }
 
+/* The message is the container's only child exactly when nothing is collected. */
+.collection-empty {
+    display: none;
+    grid-column: 1 / -1;
+}
+
+.collection-empty:only-child {
+    display: block;
+    animation: fade-in 0.4s ease-out;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+}
+
 .collection-item {
     position: relative;
     height: 300px;

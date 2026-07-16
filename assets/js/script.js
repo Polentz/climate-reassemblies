@@ -123,7 +123,7 @@ const handleCollection = async () => {
             return stored.filter((entry) => typeof entry?.id === "string" && typeof entry?.page === "string");
         } catch {
             return [];
-        }
+        };
     };
 
     const writeStore = (entries) => {
@@ -132,7 +132,7 @@ const handleCollection = async () => {
         } catch {
             // Private browsing and full quotas both throw here. The collection still
             // works for this visit; it just won't come back after a refresh.
-        }
+        };
     };
 
     // The site's other pages, taken off its own nav — a page added to the nav later is
@@ -536,7 +536,9 @@ const handleCollection = async () => {
     // Run a DOM move, then walk the cards back from where they were to where they now are
     // and let gsap play that gap out — so they slide aside instead of snapping.
     const slideIntoPlace = (move) => {
-        const cards = [...container.children];
+        // Only real cards slide; the empty message just appears via CSS, and its
+        // display: none rect before the move would read as a bogus slide from 0.
+        const cards = [...container.querySelectorAll(".collection-item")];
         const before = new Map(cards.map((card) => [card, card.getBoundingClientRect().top]));
 
         move();
