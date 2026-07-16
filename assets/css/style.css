@@ -168,7 +168,9 @@ h1 {
 }
 
 @keyframes fade-in {
-    from { opacity: 0; }
+    from {
+        opacity: 0;
+    }
 }
 
 .collection-item {
@@ -508,7 +510,7 @@ main {
 
 .gallery-item .interactive-item {
     position: absolute;
-    bottom: 1rem;
+    top: 1rem;
     right: 1rem;
 }
 
