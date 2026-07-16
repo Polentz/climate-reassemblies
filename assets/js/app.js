@@ -6,7 +6,7 @@ const lineEl = document.getElementById('line');
 const headerEl = document.querySelector('header');
 
 // Show a "progress" cursor only while glyphs are actually in motion
-function setHeaderBusy(busy) {
+const setHeaderBusy = (busy) => {
   if (headerEl) headerEl.style.cursor = busy ? 'progress' : 'default';
 };
 
@@ -24,7 +24,7 @@ const state = {
 };
 
 // Gap (px) that follows the character at position i in the original phrase
-function gapAfter(i) {
+const gapAfter = (i) => {
   return (state.chars[i] === ' ' ? state.wordGap : state.letterGap) * state.gapUnit;
 };
 
@@ -41,10 +41,10 @@ const config = {
 };
 
 const BLUR_PX = 2;
-function setMovingBlur(el) { if (!config.enableBlurEffect) return; el.style.filter = `blur(${BLUR_PX}px)`; }
-function resetBlur(el) { el.style.filter = 'none'; }
+const setMovingBlur = (el) => { if (!config.enableBlurEffect) return; el.style.filter = `blur(${BLUR_PX}px)`; };
+const resetBlur = (el) => { el.style.filter = 'none'; };
 
-function createGlyphs(phrase) {
+const createGlyphs = (phrase) => {
   lineEl.textContent = phrase;
   const split = new SplitText(lineEl, { type: 'chars', charsClass: 'glyph' });
 
@@ -65,15 +65,15 @@ function createGlyphs(phrase) {
     }
   }
   return fragments;
-}
+};
 
-function measureLine() {
+const measureLine = () => {
   const containerRect = lineEl.getBoundingClientRect();
   const fontHeight = containerRect.height; // used for the vertical offset track
   return { fontHeight, containerRect };
 };
 
-function setupAbsoluteSlots(glyphs) {
+const setupAbsoluteSlots = (glyphs) => {
   const { containerRect } = measureLine();
   // Fix container height so absolutely positioned children don't collapse it
   lineEl.style.height = `${containerRect.height}px`;
@@ -132,7 +132,7 @@ function setupAbsoluteSlots(glyphs) {
 };
 
 // Calculates target x positions for a given glyph order
-function computeXPositionsForOrder(order) {
+const computeXPositionsForOrder = (order) => {
   const x = [];
   let cursor = 0;
   for (let i = 0; i < order.length; i++) {
@@ -144,7 +144,7 @@ function computeXPositionsForOrder(order) {
   return x;
 };
 
-function planReassemblySlots() {
+const planReassemblySlots = () => {
   const count = state.glyphs.length;
   const maxPick = Math.min(config.maxGroupSize, count);
   const numToMove = Math.max(2, Math.floor(Math.random() * maxPick) + 1);
@@ -187,7 +187,7 @@ function planReassemblySlots() {
   return { movingPositions, newOrder, newX, moves };
 };
 
-function runCycle() {
+const runCycle = () => {
   const measure = measureLine();
   const vOffset = measure.fontHeight * 1.3;
   const canMoveUp = measure.containerRect.top - vOffset >= 0;
@@ -242,7 +242,7 @@ function runCycle() {
 };
 
 // Secret scramble text reveal back to original layout over ~2 seconds
-function scrambleRevealToOriginal(onDone) {
+const scrambleRevealToOriginal = (onDone) => {
   // Wait 2 seconds before starting the scramble
   const startDelayMs = config.scrambleDelayMs;
   setTimeout(() => {
@@ -279,7 +279,7 @@ function scrambleRevealToOriginal(onDone) {
     });
 
     // Kick off the scramble loop
-    function step(now) {
+    const step = (now) => {
       let allSettled = true;
       for (let i = 0; i < state.glyphs.length; i++) {
         const g = state.glyphs[i];
@@ -314,46 +314,40 @@ function scrambleRevealToOriginal(onDone) {
         setHeaderBusy(false);
         if (typeof onDone === 'function') onDone();
       }
-    }
+    };
 
     requestAnimationFrame(step);
   }, startDelayMs);
 };
 
 let schedulerIntervalId = null;
-let schedulerRunning = false;
-let schedulerTimeouts = [];
-function startScheduler() {
+const startScheduler = () => {
   // ensure no overlap; use config-driven cadence and cycle length
   let locked = false;
   let tickCount = 0;
-  schedulerRunning = true;
 
   const tick = () => {
-    if (!schedulerRunning || locked) return;
+    if (locked) return;
     locked = true;
     // wait pre-cycle hold, then run the cycle
-    schedulerTimeouts.push(setTimeout(() => {
-      if (!schedulerRunning) return;
+    setTimeout(() => {
       runCycle();
       tickCount += 1;
 
       // unlock after forward completes, derived from motion duration with small buffer
       const forwardDoneMs = Math.min(config.tickIntervalMs, Math.max(200, config.motionDurationMs)) + 180;
-      schedulerTimeouts.push(setTimeout(() => {
-        if (!schedulerRunning) return;
+      setTimeout(() => {
         if (tickCount >= config.ticksPerCycle) {
           // run secret scramble reveal, then reset counter and unlock
           scrambleRevealToOriginal(() => {
             tickCount = 0;
             locked = false;
           });
-          return;
         } else {
           locked = false;
         }
-      }, forwardDoneMs));
-    }, Math.max(0, config.preCycleHoldMs)));
+      }, forwardDoneMs);
+    }, Math.max(0, config.preCycleHoldMs));
   };
 
   // initial immediate tick, then schedule
