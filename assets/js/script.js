@@ -5,6 +5,19 @@ const documentHeight = () => {
     doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
 };
 
+const anchorTags = document.querySelectorAll(".js-href");
+if (anchorTags) {
+    anchorTags.forEach(link => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const href = link.getAttribute("href");
+            document.querySelector(href).scrollIntoView({
+                behavior: "smooth"
+            });
+        });
+    });
+};
+
 const handleSections = () => {
     const sections = [...document.querySelectorAll(".section")];
     if (!sections.length) return;
@@ -725,6 +738,46 @@ const handleVideoPlayers = (scope = document) => {
     });
 };
 
+const handleInfo = () => {
+    const button = document.getElementById("info-button");
+    const main = document.querySelector(".main");
+    const footer = document.getElementById("footer");
+    const header = document.querySelector(".header");
+    if (!button || !main || !footer) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let open = false;
+
+
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+        open = !open;
+        button.setAttribute("aria-expanded", open);
+        // The visible label is swapped for a × icon in CSS, so name it for screen readers.
+        if (open) button.setAttribute("aria-label", "Close");
+        else button.removeAttribute("aria-label");
+        // header.classList.toggle("info-open", open);
+        if (open) {
+            footer.style.visibility = "visible";
+            header.classList.add("info-open");
+            // document.body.classList.add("footer-open");
+        }
+
+        gsap.to(main, {
+            yPercent: open ? -100 : 0,
+            duration: reduced ? 0 : 0.8,
+            ease: "power3.inOut",
+            overwrite: true,
+            onComplete: () => {
+                if (open) return;
+                footer.style.visibility = "";
+                header.classList.remove("info-open");
+                // document.body.classList.remove("footer-open");
+            }
+        });
+    });
+};
+
 const backgroundParallax = () => {
     // Respect users who prefer reduced motion — skip the effect entirely.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -763,6 +816,7 @@ window.addEventListener("load", () => {
     handleSections();
     handleCollection();
     handleVideoPlayers();
+    handleInfo();
 });
 
 window.addEventListener("resize", () => {

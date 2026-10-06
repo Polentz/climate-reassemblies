@@ -14,6 +14,9 @@
 
 html {
     font-size: 100%;
+    /* The page never scrolls: the deck and the footer are both one screen tall,
+       stacked on top of each other (see main and .footer). */
+    overflow: hidden;
 }
 
 html,
@@ -39,14 +42,21 @@ body {
     will-change: transform;
 } */
 
-header {
+.header {
     position: fixed;
     top: 1rem;
     right: 4rem;
     padding: 1rem 2rem;
     z-index: 1000;
+    opacity: 1;
     background: var(--color-white);
     border-radius: 60px;
+    transition: background .3s ease, opacity .3s ease;
+
+}
+
+.header.info-open {
+    opacity: 0;
 }
 
 h1 {
@@ -55,6 +65,17 @@ h1 {
     font-size: 2rem;
     line-height: 1;
     letter-spacing: var(--letter-spacing);
+    transition: color .3s ease;
+}
+
+/* Once the footer is uncovered (set in script.js), the title sits on black. */
+.footer-open .header {
+    opacity: 1;
+    background: transparent;
+}
+
+.footer-open h1 {
+    color: var(--color-white);
 }
 
 .glyph {
@@ -94,6 +115,32 @@ h1 {
 .nav-button a {
     color: inherit;
     text-decoration: none;
+}
+
+/* The Info button carries both its label and a close icon, and shows the one
+   that matches the state set in script.js. */
+#info-button {
+    display: flex;
+    align-items: center;
+}
+
+.info-icon {
+    display: none;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.info-icon path {
+    stroke: var(--icon-color);
+    stroke-width: 3;
+}
+
+#info-button[aria-expanded="true"] .info-label {
+    display: none;
+}
+
+#info-button[aria-expanded="true"] .info-icon {
+    display: block;
 }
 
 .interactive-item {
@@ -321,10 +368,14 @@ h1 {
 
 main {
     position: relative;
+    z-index: 1;
     height: var(--doc-height);
     width: 100%;
     display: block;
     overflow: hidden;
+    /* Opaque, so it hides the fixed footer underneath until it slides up. */
+    background: var(--color-black);
+    will-change: transform;
 }
 
 .section {
@@ -579,8 +630,14 @@ main {
 }
 
 .footer {
-    position: sticky;
-    bottom: 0;
+    /* Sits still behind main; the Info button slides main up to reveal it. */
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    height: var(--doc-height);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    visibility: hidden;
     background: var(--color-black);
     color: var(--color-white);
 }
