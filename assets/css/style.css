@@ -27,6 +27,23 @@ body {
     background: var(--color-black);
 }
 
+/* The page stays hidden until script.js has laid it out and the fonts are in,
+   then fades in all at once (see revealPage). */
+body {
+    opacity: 0;
+    transition: opacity .8s ease;
+}
+
+body.is-loaded {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body {
+        transition: none;
+    }
+}
+
 /* body::before {
     content: "";
     position: fixed;

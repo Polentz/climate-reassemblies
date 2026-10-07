@@ -5,6 +5,16 @@ const documentHeight = () => {
     doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
 };
 
+const revealPage = () => {
+    // Wait for the web fonts so text doesn't change shape mid-fade, but never
+    // keep the page hidden for more than a second and a half.
+    const timeout = new Promise((resolve) => setTimeout(resolve, 1500));
+    Promise.race([document.fonts.ready, timeout]).then(() => {
+        // One frame later, so app.js has built the title before the fade starts.
+        requestAnimationFrame(() => document.body.classList.add("is-loaded"));
+    });
+};
+
 const anchorTags = document.querySelectorAll(".js-href");
 if (anchorTags) {
     anchorTags.forEach(link => {
@@ -810,9 +820,11 @@ const backgroundParallax = () => {
     });
 };
 
-window.addEventListener("load", () => {
+// Start as soon as the HTML is parsed, without waiting for images to download.
+document.addEventListener("DOMContentLoaded", () => {
     history.scrollRestoration = "manual";
     documentHeight();
+    revealPage();
     handleSections();
     handleCollection();
     handleVideoPlayers();

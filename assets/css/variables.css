@@ -1,5 +1,6 @@
 :root {
-    --doc-height: 100%;
+    /* Starting value until script.js measures window.innerHeight. */
+    --doc-height: 100vh;
     --color-black: #000000;
     --color-white: #ffffff;
     --color-accent: #ffffff;
