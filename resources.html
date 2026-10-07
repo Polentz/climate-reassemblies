@@ -13,7 +13,13 @@
     <link rel="stylesheet" href="assets/css/variables.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <noscript>Please turn on JS to navigate this website</noscript>
-    <noscript><style>body { opacity: 1; }</style></noscript>
+    <noscript>
+        <style>
+            body {
+                opacity: 1;
+            }
+        </style>
+    </noscript>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/SplitText.min.js" defer></script>
@@ -23,16 +29,21 @@
 
 <body>
 
-    <header>
+    <header class="header">
         <h1 id="line">Climate ReAssemblies</h1>
     </header>
 
     <nav class="nav" aria-label="Main navigation">
-        <a class="button nav-button">En/De</a>
-        <button class="button nav-button">Search</button>
         <a class="button nav-button" href="https://climatereassemblieslexicon.sheffield.ac.uk/define"
             target="_blank">Lexicon</a>
         <a class="button nav-button" href="index.html">Overview</a>
+        <a id="info-button" class="button nav-button js-href" href="#footer" aria-expanded="false">
+            <span class="info-label">Info</span>
+            <svg class="info-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <path d="M4 4L20 20M20 4L4 20" />
+            </svg>
+        </a>
     </nav>
 
     <main class="main">
@@ -614,12 +625,13 @@
         </section>
     </main>
 
-    <footer class="footer">
+    <footer id="footer" class="footer">
         <div class="footer-layout-wrapper">
             <div class="footer-top">
                 <div class="footer-block footer-contact">
+                    <!-- <h2 class="text-style-label">Contact</h2> -->
                     <h2 class="text-style-h2">
-                        Climate ReAssemblies<br>
+                        Climate ReAssemblies
                     </h2>
                     <h3 class="text-style-h3">
                         University of Tübingen<br>
@@ -631,6 +643,7 @@
                         </li>
                     </ul>
                 </div>
+
 
                 <div class="footer-block footer-partners">
                     <h2 class="text-style-label">Partners</h2>
@@ -661,8 +674,8 @@
                 <div class="footer-block footer-credits">
                     <h2 class="text-style-label">Credits</h2>
                     <ul class="footer-credit-list">
-                        <li class="text-style-caption"><span class="text-style-label">Thanks to</span><br>All workshop
-                            participants and facilitators</li>
+                        <li class="text-style-caption"><span class="text-style-label">Photography</span><br>Climate
+                            ReAssemblies project team</li>
                         <li class="text-style-caption"><span class="text-style-label">Climate ReAssemblies
                                 Lexicon Design</span><br>Paul Baule
                         </li>
