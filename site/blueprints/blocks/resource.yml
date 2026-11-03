@@ -1,0 +1,72 @@
+name: Resource
+icon: book
+preview: fields
+wysiwyg: true
+fields:
+  category:
+    extends: fields/category
+  heading:
+    label: Title
+    type: text
+    required: true
+    width: 1/2
+  subheading:
+    label: Subtitle
+    help: e.g. "A text by …" or "Attendees: …"
+    type: text
+  media:
+    label: Preview
+    type: toggles
+    default: image
+    options:
+      image: Image
+      video: Video
+  image:
+    label: Image
+    type: files
+    query: page.images
+    multiple: false
+    uploads: image
+    width: 1/2
+    when:
+      media: image
+  link:
+    label: Link
+    help: Opens in a new tab when the image is clicked.
+    type: link
+    options:
+      - url
+      - page
+      - file
+    width: 1/2
+    when:
+      media: image
+  video:
+    label: Video
+    type: files
+    query: page.videos
+    multiple: false
+    uploads: video
+    width: 1/2
+    when:
+      media: video
+  poster:
+    label: Poster image
+    help: Shown before the video plays.
+    type: files
+    query: page.images
+    multiple: false
+    uploads: image
+    width: 1/2
+    when:
+      media: video
+  description:
+    label: Description
+    type: writer
+    marks:
+      - bold
+      - italic
+      - link
+    nodes:
+      - paragraph
+      - bulletList

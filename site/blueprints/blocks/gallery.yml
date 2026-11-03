@@ -1,0 +1,13 @@
+name: Image gallery
+icon: images
+preview: gallery
+fields:
+  images:
+    label: Images
+    type: files
+    query: page.images
+    layout: cards
+    size: small
+    multiple: true
+    uploads: image
+    help: Click an image to edit its caption, alt text and whether it can be collected.

@@ -1,8 +1,9 @@
 gsap.registerPlugin(SplitText);
 
-const PHRASE = "Climate ReAssemblies";
-
 const lineEl = document.getElementById('line');
+
+// The title comes from the CMS (Site title), so read it off the page.
+const PHRASE = lineEl.textContent.trim() || "Climate ReAssemblies";
 
 // Layout/state based on dynamic absolute-position slots with fixed ink gaps
 const state = {

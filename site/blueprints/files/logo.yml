@@ -1,0 +1,7 @@
+title: Logo
+accept:
+  extension: svg, png, jpg, jpeg, webp
+fields:
+  alt:
+    label: Alt text
+    type: text

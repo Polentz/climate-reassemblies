@@ -1,0 +1,98 @@
+Title: Climate ReAssemblies
+
+----
+
+Description: Climate ReAssemblies is a project that explores the intersection of climate change, art, and technology. Through a series of interactive installations and workshops, we aim to engage the public in meaningful conversations about the impact of climate change on our environment and society.
+
+----
+
+Navlinks:
+
+- 
+  label: Lexicon
+  url: >
+    https://climatereassemblieslexicon.sheffield.ac.uk/define
+
+----
+
+Collectiontitle: Collect & ReAssemble
+
+----
+
+Collectionintro: <p>This is your collection area, where you can save and reassemble items from across the platform to create your own journey through the Climate ReAssemblies tools, resources, and experiences.</p><p>Whenever it appears, click the {icon} button to add items to your collection.<br>Return here anytime to review, explore, and reassemble.</p>
+
+----
+
+Collectionempty: Your collection is still empty
+
+----
+
+Contacttitle: Climate ReAssemblies
+
+----
+
+Contacttext:
+
+University of Tübingen
+University of Sheffield
+
+----
+
+Email: info@climatereassemblies.com
+
+----
+
+Copyright: Climate ReAssemblies. All rights reserved.
+
+----
+
+Credits:
+
+- 
+  role: Photography
+  name: Climate ReAssemblies project team
+- 
+  role: Climate ReAssemblies Lexicon Design
+  name: Paul Baule
+- 
+  role: 'Website Design & Code'
+  name: Giulia Polenta
+
+----
+
+Legallinks:
+
+- 
+  label: Privacy policy
+  link: ""
+- 
+  label: Accessibility
+  link: ""
+- 
+  label: Transparency
+  link: ""
+
+----
+
+Partners:
+
+- 
+  logo:
+    - file://i5nvza5sldnmzefh
+  name: University of Sheffield
+  link: ""
+- 
+  logo:
+    - file://i5nvza5sldnmzefh
+  name: University of Tübingen
+  link: ""
+- 
+  logo:
+    - file://i5nvza5sldnmzefh
+  name: ABC Institute
+  link: ""
+- 
+  logo:
+    - file://i5nvza5sldnmzefh
+  name: Foundation XYZ
+  link: ""

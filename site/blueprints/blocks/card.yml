@@ -1,0 +1,29 @@
+name: Card
+icon: box
+preview: fields
+wysiwyg: true
+fields:
+  heading:
+    label: Heading
+    type: writer
+    inline: true
+    marks:
+      - italic
+  width:
+    label: Width
+    type: toggles
+    default: wide
+    options:
+      normal: 1/4 column
+      wide: 1/2 column
+  body:
+    label: Body text
+    type: writer
+    marks:
+      - bold
+      - italic
+      - link
+    nodes:
+      - paragraph
+  collect:
+    extends: fields/collect

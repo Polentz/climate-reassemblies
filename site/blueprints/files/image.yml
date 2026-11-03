@@ -1,0 +1,27 @@
+title: Image
+accept:
+  type: image
+columns:
+  main:
+    width: 2/3
+    fields:
+      alt:
+        label: Alt text
+        help: Describes the image for people using screen readers.
+        type: text
+      caption:
+        label: Caption
+        type: textarea
+        buttons: false
+        size: small
+  sidebar:
+    width: 1/3
+    fields:
+      collect:
+        extends: fields/collect
+        fields:
+          collectable:
+            width: 1/1
+          category:
+            width: 1/1
+            default: Documentation

@@ -1,0 +1,25 @@
+name: Statement
+icon: text
+preview: fields
+wysiwyg: true
+fields:
+  lead:
+    label: Lead text
+    help: Shown in large type. Each paragraph becomes its own heading.
+    type: writer
+    marks:
+      - italic
+      - link
+    nodes:
+      - paragraph
+  body:
+    label: Body text
+    type: writer
+    marks:
+      - bold
+      - italic
+      - link
+    nodes:
+      - paragraph
+  collect:
+    extends: fields/collect

@@ -1,0 +1,13 @@
+# Category label shown on collected items. Pick one or type a new one.
+label: Category
+type: tags
+max: 1
+accept: all
+width: 1/2
+options:
+  - Definition
+  - Quotation
+  - Article
+  - Tool
+  - Interview
+  - Documentation

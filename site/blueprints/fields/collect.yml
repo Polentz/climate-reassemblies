@@ -1,0 +1,16 @@
+# Lets visitors add an item to their "Collect & ReAssemble" collection.
+# Reused by blocks and image files: `extends: fields/collect`
+type: group
+fields:
+  collectable:
+    label: Collectable
+    type: toggle
+    text:
+      - Not collectable
+      - Visitors can collect this
+    default: false
+    width: 1/2
+  category:
+    extends: fields/category
+    when:
+      collectable: true

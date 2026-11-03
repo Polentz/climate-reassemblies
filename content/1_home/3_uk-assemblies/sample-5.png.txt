@@ -1,0 +1,21 @@
+Alt: 
+
+----
+
+Caption: This is a caption
+
+----
+
+Collectable: false
+
+----
+
+Category: 
+
+----
+
+Uuid: 4iedrjtaiww1wrad
+
+----
+
+Template: image

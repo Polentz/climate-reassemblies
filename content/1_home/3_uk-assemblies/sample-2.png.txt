@@ -1,0 +1,21 @@
+Alt: 
+
+----
+
+Caption: This is a caption
+
+----
+
+Collectable: false
+
+----
+
+Category: 
+
+----
+
+Uuid: u2ppt8acbig42hkz
+
+----
+
+Template: image

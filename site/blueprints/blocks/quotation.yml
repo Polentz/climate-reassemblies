@@ -1,0 +1,22 @@
+name: Quotation
+icon: quote
+preview: fields
+wysiwyg: true
+fields:
+  text:
+    label: Quote
+    help: Quotation marks are added automatically.
+    type: textarea
+    buttons: false
+    size: small
+  source:
+    label: Source
+    help: e.g. a name and, on a new line, where it was said.
+    type: textarea
+    buttons: false
+    size: small
+  collect:
+    extends: fields/collect
+    fields:
+      category:
+        default: Quotation

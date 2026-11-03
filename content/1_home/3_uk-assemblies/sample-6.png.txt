@@ -1,0 +1,21 @@
+Alt: 
+
+----
+
+Caption: This is a caption
+
+----
+
+Collectable: true
+
+----
+
+Category: Documentation
+
+----
+
+Uuid: yzwakcm8kfjcvoyu
+
+----
+
+Template: image

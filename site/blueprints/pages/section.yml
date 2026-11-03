@@ -1,0 +1,29 @@
+title: Assemblies section
+icon: layers
+num: default
+options:
+  changeTemplate: false
+columns:
+  main:
+    width: 2/3
+    fields:
+      blocks:
+        label: Content
+        help: >
+          Statements and quotations stack in a column; cards sit in a 4-column grid.
+          Mark an item as collectable to show its "Collect" button.
+        type: blocks
+        fieldsets:
+          - statement
+          - quotation
+          - card
+          - gallery
+  sidebar:
+    width: 1/3
+    sections:
+      files:
+        label: Images
+        type: files
+        template: image
+        layout: cards
+        size: small

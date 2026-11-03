@@ -133,7 +133,10 @@ const handleCollection = async () => {
     // A source only exists in the markup of the page that declares it, so an entry names
     // its page alongside its id: to show the whole collection on every page, a page has to
     // be able to go and fetch the markup of the ones it isn't.
-    const PAGE = location.pathname.split("/").pop() || "index.html";
+    // Pages are keyed by their path ("/", "/resources"), without a trailing slash, so
+    // "/resources" and "/resources/" are the same page.
+    const pageKey = (url) => url.pathname.replace(/\/+$/, "") || "/";
+    const PAGE = pageKey(location);
 
     // Nothing but ids is stored — every item is rebuilt from its source, so edits to the
     // copy show up in a collection saved before the edit.
@@ -142,8 +145,10 @@ const handleCollection = async () => {
             const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
             if (!Array.isArray(stored)) return [];
             // Collections saved before the site had a second page are bare ids with no
-            // page to attribute them to, so they are dropped rather than guessed at.
-            return stored.filter((entry) => typeof entry?.id === "string" && typeof entry?.page === "string");
+            // page to attribute them to, so they are dropped rather than guessed at. So are
+            // entries from the old static site ("index.html"), whose ids no longer exist.
+            return stored.filter((entry) => typeof entry?.id === "string" && typeof entry?.page === "string"
+                && !entry.page.endsWith(".html"));
         } catch {
             return [];
         };
@@ -158,12 +163,12 @@ const handleCollection = async () => {
         };
     };
 
-    // The site's other pages, taken off its own nav — a page added to the nav later is
-    // reachable here for free.
-    const pages = new Set([PAGE, ...[...document.querySelectorAll("a[href$='.html']")]
+    // The site's other pages, taken off its own nav (links marked data-page-link) — a
+    // page added to the nav later in the CMS is reachable here for free.
+    const pages = new Set([PAGE, ...[...document.querySelectorAll("a[data-page-link]")]
         .map((link) => new URL(link.href, location.href))
         .filter((url) => url.origin === location.origin)
-        .map((url) => url.pathname.split("/").pop())]);
+        .map(pageKey)]);
 
     // Each page's markup is parsed once and held, so restoring twenty items off another
     // page costs one request, not twenty. A page that can't be fetched — the site opened

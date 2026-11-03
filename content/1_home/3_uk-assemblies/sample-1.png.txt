@@ -1,0 +1,21 @@
+Alt: 
+
+----
+
+Caption: This is a caption
+
+----
+
+Collectable: true
+
+----
+
+Category: Documentation
+
+----
+
+Uuid: pamj12k3to72nfw6
+
+----
+
+Template: image

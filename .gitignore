@@ -16,3 +16,20 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
+### Kirby
+# Generated thumbnails and plugin assets
+/media/*
+!/media/index.html
+
+# Lock files
+.lock
+
+# NEVER publish these files via Git
+/site/cache/*
+!/site/cache/index.html
+/site/accounts/*
+!/site/accounts/index.html
+/site/sessions/*
+!/site/sessions/index.html
+/site/config/.license
