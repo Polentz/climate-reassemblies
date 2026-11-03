@@ -8,18 +8,26 @@ fields:
     help: Shown in large type. Each paragraph becomes its own heading.
     type: writer
     marks:
+    marks:
       - italic
+      - underline
       - link
+      - clear
     nodes:
-      - paragraph
+      - bulletList
+      - orderedList
   body:
     label: Body text
     type: writer
     marks:
       - bold
       - italic
+      - underline
       - link
+      - email
+      - clear
     nodes:
-      - paragraph
+      - bulletList
+      - orderedList
   collect:
     extends: fields/collect

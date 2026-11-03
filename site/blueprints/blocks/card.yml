@@ -9,6 +9,9 @@ fields:
     inline: true
     marks:
       - italic
+      - underline
+      - link
+      - clear
   width:
     label: Width
     type: toggles
@@ -22,8 +25,12 @@ fields:
     marks:
       - bold
       - italic
+      - underline
       - link
+      - email
+      - clear
     nodes:
-      - paragraph
+      - bulletList
+      - orderedList
   collect:
     extends: fields/collect

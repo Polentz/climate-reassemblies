@@ -4,3 +4,13 @@ fields:
   text:
     label: Text
     type: writer
+    marks:
+      - bold
+      - italic
+      - underline
+      - link
+      - email
+      - clear
+    nodes:
+      - bulletList
+      - orderedList

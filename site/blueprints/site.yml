@@ -62,10 +62,15 @@ tabs:
         help: Each paragraph is shown as a large heading. Type {icon} where the collect icon should appear.
         type: writer
         marks:
+          - bold
           - italic
+          - underline
           - link
+          - email
+          - clear
         nodes:
-          - paragraph
+          - bulletList
+          - orderedList
       collectionEmpty:
         label: Empty collection message
         type: text
