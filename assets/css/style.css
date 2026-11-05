@@ -62,8 +62,8 @@ body.is-loaded {
 .header {
     position: fixed;
     top: 1rem;
-    right: 4rem;
-    padding: 1rem 2rem;
+    right: var(--space-xl);
+    padding: 1rem var(--space-m);
     z-index: 1000;
     opacity: 1;
     background: var(--color-white);
@@ -79,7 +79,7 @@ body.is-loaded {
 h1 {
     position: relative;
     font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
-    font-size: 2rem;
+    font-size: var(--font-size-large);
     line-height: 1;
     letter-spacing: var(--letter-spacing);
     transition: color .3s ease;
@@ -110,10 +110,10 @@ h1 {
 
 .nav {
     position: fixed;
-    bottom: 2rem;
-    right: 4rem;
+    bottom: var(--space-m);
+    right: var(--space-xl);
     display: flex;
-    gap: 2rem;
+    gap: var(--space-m);
     z-index: 1000;
 }
 
@@ -122,11 +122,11 @@ h1 {
     height: 3rem;
     display: block;
     font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
-    font-size: 2rem;
+    font-size: var(--font-size-large);
     line-height: 1.2;
     letter-spacing: var(--letter-spacing);
     background: var(--color-white);
-    padding: .25rem 2rem;
+    padding: .25rem var(--space-m);
 }
 
 .nav-button a {
@@ -212,7 +212,7 @@ h1 {
 }
 
 #collection {
-    margin-top: 4rem;
+    margin-top: var(--space-xl);
 }
 
 #collection-container {
@@ -243,11 +243,11 @@ h1 {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-m);
     background: var(--color-white);
     border-radius: 30px;
     box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
-    padding: 2rem;
+    padding: var(--space-m);
     cursor: move;
     transition:
         transform .5s cubic-bezier(.34, 1.56, .64, 1),
@@ -260,8 +260,8 @@ h1 {
 
 .collection-remove {
     position: absolute;
-    top: 2rem;
-    right: 2rem;
+    top: var(--space-m);
+    right: var(--space-m);
     display: flex;
     background: none;
     border: none;
@@ -362,13 +362,13 @@ h1 {
 .collection-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-m);
     overflow: hidden;
 }
 
 .collection-content .text-style-quote {
     font-family: "Apercu Medium", Helvetica, Arial, sans-serif;
-    font-size: 2rem;
+    font-size: var(--font-size-large);
     line-height: 1.2;
 }
 
@@ -459,14 +459,14 @@ main {
     align-items: center;
     justify-content: flex-start;
     font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
-    font-size: 2rem;
+    font-size: var(--font-size-large);
     line-height: 1;
     letter-spacing: var(--letter-spacing);
     writing-mode: vertical-rl;
     text-orientation: mixed;
     /* background: var(--color-white); */
     white-space: nowrap;
-    padding: 2rem .5rem;
+    padding: var(--space-m) .5rem;
     cursor: alias;
     transition:
         transform 0.3s ease,
@@ -483,17 +483,17 @@ main {
 }
 
 .section-layout-wrapper {
-    padding: 8rem;
+    padding: var(--space-3xl);
 }
 
 .section-header {
-    margin-bottom: 6rem;
+    margin-bottom: var(--space-2xl);
 }
 
 .section-content-body {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-m);
 }
 
 .grid {
@@ -507,10 +507,10 @@ main {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-m);
     background: var(--color-white);
     border: solid 1px var(--color-black);
-    padding: 2rem;
+    padding: var(--space-m);
     overflow: hidden;
     transition: all .3s ease;
 }
@@ -526,17 +526,17 @@ main {
 .flex-column {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-m);
 }
 
 .flex-column-item {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-m);
 }
 
 .flex-column-item:has(> .text-style-quote) {
-    padding: 3rem 0;
+    padding: var(--space-l) 0;
     border-top: solid 1px var(--color-black);
     border-bottom: solid 1px var(--color-black);
 }
@@ -583,7 +583,7 @@ main {
 }
 
 .list-item {
-    gap: 2rem;
+    gap: var(--space-m);
 }
 
 .list-item-preview {
@@ -633,7 +633,7 @@ main {
     grid-column: span 2;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: var(--space-l);
 }
 
 .list-item-header .text-style-label {
@@ -662,20 +662,20 @@ main {
 .footer-layout-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 6rem;
-    padding: 8rem;
+    gap: var(--space-2xl);
+    padding: var(--space-3xl);
 }
 
 .footer-top {
     display: grid;
     grid-template-columns: 4fr 2fr 2fr;
-    gap: 4rem;
+    gap: var(--space-xl);
 }
 
 .footer-block {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-m);
 }
 
 .footer a {
@@ -714,7 +714,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 3rem;
+    gap: var(--space-l);
 }
 
 .footer-partner img {
@@ -733,21 +733,21 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
+    gap: var(--space-m);
     border-top: solid 1px var(--color-white);
-    padding-top: 2rem;
+    padding-top: var(--space-m);
 }
 
 .footer-legal {
     display: flex;
-    gap: 2rem;
+    gap: var(--space-m);
 }
 
 @media (max-width: 900px) {
 
     .footer-layout-wrapper {
-        gap: 4rem;
-        padding: 4rem 2rem;
+        gap: var(--space-xl);
+        padding: var(--space-xl) var(--space-m);
     }
 
     .footer-top {

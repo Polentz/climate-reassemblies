@@ -12,17 +12,37 @@
     --color-scheme-secondary: #dde3eb;
 
     --letter-spacing: 0px;
+
+    /* Fluid type scale: each size grows smoothly with the window width,
+       from its minimum on phones (~375px) to its maximum on desktops (~1440px). */
+    --font-size-display: clamp(3rem, 1.5rem + 7vw, 8rem);
+    --font-size-large: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    --font-size-body: clamp(1rem, 0.9rem + 0.4vw, 1.25rem);
+    --font-size-small: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+
+    /* Fluid spacing scale for padding, margins and gaps. Same idea as the type scale:
+       the max is the original desktop value, the min is roughly half of it on phones. */
+    --space-m: clamp(1rem, 0.6rem + 1.7vw, 2rem);
+    /* 2rem */
+    --space-l: clamp(1.5rem, 0.9rem + 2.5vw, 3rem);
+    /* 3rem */
+    --space-xl: clamp(2rem, 1.2rem + 3.4vw, 4rem);
+    /* 4rem */
+    --space-2xl: clamp(3rem, 1.8rem + 5vw, 6rem);
+    /* 6rem */
+    --space-3xl: clamp(2rem, 9vw, 8rem);
+    /* 8rem */
 }
 
 .text-style-h2 {
     font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
-    font-size: 8rem;
+    font-size: var(--font-size-display);
     line-height: 1;
 }
 
 .text-style-h3 {
     font-family: "Apercu Medium", Helvetica, Arial, sans-serif;
-    font-size: 2rem;
+    font-size: var(--font-size-large);
     line-height: 1.2;
 }
 
@@ -30,13 +50,13 @@
     font-family: "Inter", sans-serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 1.25rem;
+    font-size: var(--font-size-body);
     line-height: 1.2;
 }
 
 .text-style-quote {
     font-family: "Apercu Bold", Helvetica, Arial, sans-serif;
-    font-size: 8rem;
+    font-size: var(--font-size-display);
     line-height: 1.2;
     text-align: center;
 }
@@ -50,7 +70,7 @@
     font-family: "Apercu Bold", sans-serif;
     font-weight: 700;
     font-style: bold;
-    font-size: .9rem;
+    font-size: var(--font-size-small);
     line-height: 1.4;
     text-transform: uppercase;
     letter-spacing: 4px;
@@ -60,7 +80,7 @@
     font-family: "Inter", sans-serif;
     font-weight: 400;
     font-style: normal;
-    font-size: .9rem;
+    font-size: var(--font-size-small);
     line-height: 1.2;
 }
 

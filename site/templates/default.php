@@ -1,17 +1,11 @@
 <?php
-/**
- * Every top-level page (Overview/home, Resources, …) is a set of tabs:
- * one per child section page, followed by the "Collect & ReAssemble" tab.
- *
- * @var Kirby\Cms\Site $site
- * @var Kirby\Cms\Page $page
- */
 $sections = $page->children()->listed();
 ?>
+<?php snippet('head') ?>
 <?php snippet('header') ?>
 
-    <main class="main">
-        <?php if ($sections->isEmpty()): ?>
+<main class="main">
+    <?php if ($sections->isEmpty()): ?>
         <section id="<?= $page->slug() ?>-section" class="section current">
             <div class="section-nav-wrapper">
                 <h2 class="section-nav-tab" role="tab" tabindex="0"><?= $page->title()->esc() ?></h2>
@@ -31,13 +25,14 @@ $sections = $page->children()->listed();
                 </div>
             </div>
         </section>
-        <?php endif ?>
+    <?php endif ?>
 
-        <?php foreach ($sections as $section): ?>
+    <?php foreach ($sections as $section): ?>
         <?php snippet('section', ['section' => $section, 'current' => $section->isFirst($sections)]) ?>
-        <?php endforeach ?>
+    <?php endforeach ?>
 
-        <?php snippet('collection-section') ?>
-    </main>
+    <?php snippet('collection-section') ?>
+</main>
 
 <?php snippet('footer') ?>
+<?php snippet('foot') ?>
