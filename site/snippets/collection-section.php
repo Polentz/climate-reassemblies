@@ -8,9 +8,10 @@
  */
 $icon = '<span class="interactive-icon">' . snippet('icons/collect', return: true) . '</span>';
 ?>
-<section id="interactive-section" class="section">
+<section id="interactive-section" class="section" style="--tab: <?= $tab ?? 0 ?>">
     <div class="section-nav-wrapper">
-        <h2 class="section-nav-tab" role="tab" tabindex="0"><?= $site->collectionTitle()->or('Collect & ReAssemble')->esc() ?></h2>
+        <h2 class="section-nav-tab" role="tab" tabindex="0">
+            <?= $site->collectionTitle()->or('Collect & ReAssemble')->esc() ?></h2>
     </div>
     <div class="section-layout-wrapper">
         <div class="section-header">
@@ -26,7 +27,8 @@ $icon = '<span class="interactive-icon">' . snippet('icons/collect', return: tru
                 <div id="collection" class="flex-column">
                     <ul id="collection-container" class="flex-column-item">
                         <li class="collection-empty">
-                            <p class="text-style-label"><?= $site->collectionEmpty()->or('Your collection is still empty')->esc() ?></p>
+                            <p class="text-style-label">
+                                <?= $site->collectionEmpty()->or('Your collection is still empty')->esc() ?></p>
                         </li>
                     </ul>
                     <?php snippet('collection-template') ?>

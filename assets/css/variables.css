@@ -13,6 +13,9 @@
 
     --letter-spacing: 0px;
 
+    /* Width of a section's vertical tab, and how far each stacked card is offset. */
+    --tab-width: 5rem;
+
     /* Fluid type scale: each size grows smoothly with the window width,
        from its minimum on phones (~375px) to its maximum on desktops (~1440px). */
     --font-size-display: clamp(3rem, 1.5rem + 7vw, 8rem);

@@ -1,4 +1,5 @@
-<section id="<?= $section->slug() ?>-section" class="section<?= $current ? ' current' : '' ?>">
+<section id="<?= $section->slug() ?>-section" class="section<?= $current ? ' current' : '' ?>"
+    style="--tab: <?= $tab ?>">
     <div class="section-nav-wrapper">
         <h2 class="section-nav-tab" role="tab" tabindex="0"><?= $section->title()->esc() ?></h2>
     </div>

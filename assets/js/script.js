@@ -34,16 +34,16 @@ const handleSections = () => {
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // The deck has one slot per section. Slot 0 is the right-most, front-most card;
-    // every slot after it sits 5rem further left, which is exactly the width of a tab —
+    // The deck has one tab per section. Tab 0 is the right-most, front-most card;
+    // every tab after it sits one tab width (--tab-width) further left —
     // so a card can never cover the tab of the card behind it.
-    let slotWidth = 0;
+    let tabWidth = 0;
     const measure = () => {
-        slotWidth = parseFloat(getComputedStyle(document.documentElement).fontSize) * 5;
+        tabWidth = sections[0].querySelector(".section-nav-tab").offsetWidth;
     };
-    const slotX = (slot) => -slot * slotWidth;
+    const slotX = (tab) => -tab * tabWidth;
 
-    // The active card owns slot 0; the rest keep their DOM order in the slots behind it.
+    // The active card owns tab 0; the rest keep their DOM order in the tabs behind it.
     const slotOf = (section, active) => {
         const rest = sections.filter((s) => s !== active);
         return section === active ? 0 : rest.indexOf(section) + 1;
@@ -52,13 +52,13 @@ const handleSections = () => {
     // Lay the deck out. `animate` is false on load and on resize, true on a click.
     const layout = (active, animate) => {
         sections.forEach((section) => {
-            const slot = slotOf(section, active);
+            const tab = slotOf(section, active);
             // Front-most card needs the highest z-index, so count down from the back.
-            gsap.set(section, { zIndex: sections.length - slot, transformOrigin: "left center" });
+            gsap.set(section, { zIndex: sections.length - tab, transformOrigin: "left center" });
             if (section === active || !animate) {
-                gsap.set(section, { x: slotX(slot) });
+                gsap.set(section, { x: slotX(tab) });
             } else {
-                gsap.to(section, { x: slotX(slot), duration: 0.6, ease: "power3.out" });
+                gsap.to(section, { x: slotX(tab), duration: 0.6, ease: "power3.out" });
             }
         });
     };
@@ -75,8 +75,8 @@ const handleSections = () => {
             return;
         }
 
-        // The other cards slide across to their new slots while the clicked one
-        // rises out of the deck: a short push right, then an ease back into slot 0.
+        // The other cards slide across to their new tabs while the clicked one
+        // rises out of the deck: a short push right, then an ease back into tab 0.
         layout(section, true);
         gsap.timeline()
             .fromTo(section,
@@ -119,7 +119,7 @@ const handleSections = () => {
         if (wrapper) activate(wrapper.closest(".section"));
     });
 
-    // Slot width is in rem, so it only changes if the root font size does.
+    // Re-measure in case the tab width changed (e.g. root font size).
     window.addEventListener("resize", () => {
         measure();
         layout(document.querySelector(".section.current") || sections[0], false);

@@ -398,7 +398,9 @@ main {
 .section {
     position: absolute;
     height: var(--doc-height);
-    width: calc(100% - 15rem);
+    /* Leave room for the tab of every card stacked behind this one.
+       --section-count is set on <main> from the number of section pages in the panel. */
+    width: calc(100% - (var(--section-count, 1) - 1) * var(--tab-width));
     right: 0;
     display: block;
     background: var(--color-white);
@@ -423,24 +425,11 @@ main {
     opacity: .35;
 }
 
-.section:first-of-type {
-    z-index: 3;
-    transform: translateX(0rem);
-}
-
-.section:nth-of-type(2) {
-    z-index: 2;
-    transform: translateX(-5rem);
-}
-
-.section:nth-of-type(3) {
-    z-index: 1;
-    transform: translateX(-10rem);
-}
-
-.section:nth-of-type(4) {
-    z-index: 0;
-    transform: translateX(-15rem);
+/* Starting position before script.js takes over: each card sits one tab further left
+   and further back than the one before it. --tab is set per section in PHP. */
+.section {
+    z-index: calc(var(--section-count, 1) - var(--tab, 0));
+    transform: translateX(calc(var(--tab, 0) * var(--tab-width) * -1));
 }
 
 .section-nav-wrapper {
@@ -450,7 +439,7 @@ main {
 }
 
 .section-nav-tab {
-    width: 5rem;
+    width: var(--tab-width);
     height: var(--doc-height);
     position: absolute;
     top: 0;
